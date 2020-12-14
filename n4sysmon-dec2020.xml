@@ -376,7 +376,7 @@
 			<DestinationPort name="Tor" condition="is">9030</DestinationPort> <!--Tor protocol [ http://www.computerworlduk.com/tutorial/security/tor-enterprise-2016-blocking-malware-darknet-use-rogue-nodes-3633907/ ] -->
             <!--Ports: Emotet - https://us-cert.cisa.gov/ncas/alerts/aa20-280a-->
 			<DestinationPort name="Emotet" condition="is">20</DestinationPort> 
-            <DestinationPort name="Emotet" condition="is"7080</DestinationPort> 
+            <DestinationPort name="Emotet" condition="is">7080</DestinationPort> 
             <DestinationPort name="Emotet" condition="is">50000</DestinationPort> 
 		</NetworkConnect>
 	</RuleGroup>
