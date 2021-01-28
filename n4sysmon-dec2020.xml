@@ -80,7 +80,7 @@
 				<IntegrityLevel condition="is">AppContainer</IntegrityLevel>				<!--Windows: Don't care about sandboxed processes right now. Will need to revisit this decision.-->
 				<ParentCommandLine condition="begin with">%%SystemRoot%%\system32\csrss.exe ObjectDirectory=\Windows</ParentCommandLine>				<!--Windows:CommandShell: Triggered when programs use the command shell, but doesn't provide attribution for what caused it-->
 				<ParentCommandLine condition="is">C:\windows\system32\wermgr.exe -queuereporting</ParentCommandLine>				<!--Windows:Windows error reporting/telemetry-->
-				<CommandLine condition="is">C:\Windows\System32\regsvr32.exe" /s "C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
+				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
 				<CommandLine condition="is">C:\WINDOWS\system32\devicecensus.exe UserCxt</CommandLine>
 				<CommandLine condition="is">C:\Windows\System32\usocoreworker.exe -Embedding</CommandLine>
 				<ParentImage condition="is">C:\Windows\system32\SearchIndexer.exe</ParentImage>				<!--Windows:Search: Launches many uninteresting sub-processes-->
