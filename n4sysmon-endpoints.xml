@@ -354,6 +354,7 @@
 				<!--SECTION: Microsoft-->
 				<Image condition="begin with">C:\ProgramData\Microsoft\Windows Defender\Platform\</Image>
 				<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image>				<!--Microsoft: Teams-->
+				<Image condition="end with">AppData\Roaming\Spotify\Spotify.exe</Image>				<!--Spotify is noisy - M Rothe-->
 				<DestinationHostname condition="end with">.microsoft.com</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.akadns.net</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.nsatc.net</DestinationHostname>				<!--Microsoft:Update delivery-->
