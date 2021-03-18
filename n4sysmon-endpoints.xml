@@ -210,7 +210,7 @@
 					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge\Application</Image>					<!--MS Edge-->
 					<Image condition="end with">identity_helper.exe</Image>					<!--MS Edge-->
 				</Rule>
-				<Image condition="is">C:\Windows\System32\msfeedssync.exe</ParentImage>				<!--MS Feed sync-->
+				<Image condition="is">C:\Windows\System32\msfeedssync.exe</Image>				<!--MS Feed sync-->
 			</ProcessCreate>
 		</RuleGroup>
 
@@ -368,6 +368,10 @@
 				<DestinationIp condition="is">127.0.0.1</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationPort condition="is">443</DestinationPort>				<!-- HTTPS is really noisy on endpoints - M Rothe-->
+				<Rule groupRelation="and">
+					<DestinationPort condition="is">443</DestinationPort>				<!-- HTTPS is really noisy on endpoints - M Rothe-->
+					<Protocol condition="is">udp</Protocol>
+				</Rule>
 			</NetworkConnect>
 		</RuleGroup>
 
