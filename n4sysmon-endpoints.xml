@@ -210,6 +210,7 @@
 					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge\Application</Image>					<!--MS Edge-->
 					<Image condition="end with">identity_helper.exe</Image>					<!--MS Edge-->
 				</Rule>
+				<Image condition="is">C:\Windows\System32\msfeedssync.exe</ParentImage>				<!--MS Feed sync-->
 			</ProcessCreate>
 		</RuleGroup>
 
