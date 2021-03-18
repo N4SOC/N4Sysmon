@@ -1084,7 +1084,7 @@
 				<QueryName condition="end with">n-able.com</QueryName> <!-- Solarwinds MSP generates lots of DNS noise-->
 				<QueryName condition="end with">systemmonitor.co.uk</QueryName> <!-- Solarwinds MSP generates lots of DNS noise-->
 				<QueryName condition="end with">wbx2.com</QueryName> <!-- Webex generates lots of DNS noise-->
-				<QueryName condition="end with">infra.webex.com</QueryName> <!-- Webex generates lots of DNS noise-->
+				<QueryName condition="end with">webex.com</QueryName> <!-- Webex generates lots of DNS noise-->
 				
 			</DnsQuery>
 		</RuleGroup>
