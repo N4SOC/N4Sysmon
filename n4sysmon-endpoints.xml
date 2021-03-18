@@ -1096,6 +1096,10 @@
 				<QueryName condition="end with">wbx2.com</QueryName>				<!-- Webex generates lots of DNS noise-->
 				<QueryName condition="end with">webex.com</QueryName>				<!-- Webex generates lots of DNS noise-->
 				<QueryName condition="is">_ldap._tcp.N4CORP._sites.n4corp.node4.co.uk</QueryName> <!-- ad joined machines generate noise-->
+				<QueryName condition="end with">eset.com</QueryName>
+				<QueryName condition="is">n4corp.node4.co.uk</QueryName>
+​	
+
 
 			</DnsQuery>
 		</RuleGroup>
