@@ -471,7 +471,8 @@
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
 		<RuleGroup name="" groupRelation="or">
 			<ProcessAccess onmatch="include">
-				<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
+			         <TargetImage condition="is">C:\Windows\system32\lsass.exe</TargetImage>
+			         <SourceImage condition="end with">powershell.exe</SourceImage>
 			</ProcessAccess>
 		</RuleGroup>
 
@@ -825,6 +826,7 @@
 			<TargetFilename condition="end with">.vb</TargetFilename>			<!--VisualBasicScripting files-->
 			<TargetFilename condition="end with">.vbe</TargetFilename>			<!--VisualBasicScripting files-->
 			<TargetFilename condition="end with">.vbs</TargetFilename>			<!--VisualBasicScripting files-->
+			<TargetFilename condition="end with">.exe</TargetFilename>			<!--Executables-->
 		</FileCreateStreamHash>
 
 		<RuleGroup name="" groupRelation="or">
@@ -1104,6 +1106,9 @@
 				<QueryName condition="is">_ldap._tcp.N4CORP._sites.n4corp.node4.co.uk</QueryName>				<!-- ad joined machines generate noise-->
 				<QueryName condition="end with">eset.com</QueryName>
 				<QueryName condition="is">n4corp.node4.co.uk</QueryName>
+				<QueryName condition="is">spocs.getpocket.com</QueryName> 
+				<QueryName condition="is">forticlient.fortinet.net</QueryName> 
+				
 			</DnsQuery>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
