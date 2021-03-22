@@ -469,7 +469,7 @@
 		<!--COMMENT:	Monitor for processes accessing other process' memory.-->
 
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
-		<RuleGroup name="" groupRelation="or">
+		<RuleGroup name="" groupRelation="and">
 			<ProcessAccess onmatch="include">
 			         <TargetImage condition="is">C:\Windows\system32\lsass.exe</TargetImage>
 			         <SourceImage condition="end with">powershell.exe</SourceImage>
