@@ -207,7 +207,7 @@
 				</Rule>
 				<!--MS Edge-->
 				<Rule groupRelation="and">
-					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge</Image>			
+					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge</Image>
 					<Image condition="end with">identity_helper.exe</Image>
 				</Rule>
 				<Rule groupRelation="and">
@@ -401,6 +401,7 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
+				<Image condition="is">ekrn.exe</Image>	<!-- ESET Binary-->
 			</ProcessTerminate>
 		</RuleGroup>
 
@@ -478,8 +479,8 @@
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
 		<RuleGroup name="" groupRelation="and">
 			<ProcessAccess onmatch="include">
-			         <TargetImage condition="is">C:\Windows\system32\lsass.exe</TargetImage>
-			         <SourceImage condition="end with">powershell.exe</SourceImage>
+				<TargetImage condition="is">C:\Windows\system32\lsass.exe</TargetImage>
+				<SourceImage condition="end with">powershell.exe</SourceImage>
 			</ProcessAccess>
 		</RuleGroup>
 
@@ -1113,9 +1114,9 @@
 				<QueryName condition="is">_ldap._tcp.N4CORP._sites.n4corp.node4.co.uk</QueryName>				<!-- ad joined machines generate noise-->
 				<QueryName condition="end with">eset.com</QueryName>
 				<QueryName condition="is">n4corp.node4.co.uk</QueryName>
-				<QueryName condition="is">spocs.getpocket.com</QueryName> 
-				<QueryName condition="is">forticlient.fortinet.net</QueryName> 
-				
+				<QueryName condition="is">spocs.getpocket.com</QueryName>
+				<QueryName condition="is">forticlient.fortinet.net</QueryName>
+
 			</DnsQuery>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
