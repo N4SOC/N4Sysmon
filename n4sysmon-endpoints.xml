@@ -172,7 +172,8 @@
 				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</ParentCommandLine>				<!--Windows-->
 				<CommandLine condition="is">C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM</CommandLine>				<!--Windows: AzureAD device enrollment agent-->
 				<!--SECTION: Microsoft:Edge-->
-				<CommandLine condition="begin with">"C:\Program Files (x86)\Microsoft\Edge Dev\Application\msedge.exe" --type=</CommandLine>
+				<CommandLine condition="begin with">C:\Program Files (x86)\Microsoft\Edge Dev\Application\msedge.exe --type=</CommandLine>
+				<Image condition="is">C:\Program Files (x86)\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe</Image>
 				<!--SECTION: Microsoft:dotNet-->
 				<CommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe</CommandLine>				<!--Microsoft:DotNet-->
 				<CommandLine condition="begin with">C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Ngen.exe</CommandLine>				<!--Microsoft:DotNet-->
@@ -201,6 +202,7 @@
 				<!--SECTION: Google-->
 				<CommandLine condition="begin with">"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --type=</CommandLine>				<!--Google:Chrome: massive command-line arguments-->
 				<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine>				<!--Google:Chrome: massive command-line arguments-->
+				<Image condition="is">C:\Program Files (x86)\Google\Update\GoogleUpdate.exe</Image>
 				<Rule groupRelation="and">					<!-- https://github.com/olafhartong/sysmon-modular/issues/26 -->
 					<ParentCommandLine condition="is">"C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe" -Embedding</ParentCommandLine>
 					<CommandLine condition="is">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>					<!--Microsoft Sentinel SIEM agent, based on MOM-->
@@ -364,6 +366,7 @@
 				<Image condition="begin with">C:\ProgramData\Microsoft\Windows Defender\Platform\</Image>
 				<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image>				<!--Microsoft: Teams-->
 				<Image condition="end with">AppData\Roaming\Spotify\Spotify.exe</Image>				<!--Spotify is noisy - M Rothe-->
+				<Image condition="end with">AppData\Local\CiscoSparkLauncher\CiscoCollabHost.exe</Image>				<!--Webex Teams is noisy - M Rothe-->
 				<DestinationHostname condition="end with">.microsoft.com</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.akadns.net</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.nsatc.net</DestinationHostname>				<!--Microsoft:Update delivery-->
