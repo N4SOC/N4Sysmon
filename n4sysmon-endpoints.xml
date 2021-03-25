@@ -382,7 +382,7 @@
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationPort condition="is">443</DestinationPort>				<!-- HTTPS is really noisy on endpoints - M Rothe-->
 				<Rule groupRelation="and">
-					<DestinationPort condition="is">443</DestinationPort>					<!-- HTTPS is really noisy on endpoints - M Rothe-->
+					<DestinationPort condition="is">53</DestinationPort>					<!-- HTTPS is really noisy on endpoints - M Rothe-->
 					<Protocol condition="is">udp</Protocol>
 				</Rule>
 			</NetworkConnect>
