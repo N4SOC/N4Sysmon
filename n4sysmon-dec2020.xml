@@ -1082,6 +1082,7 @@
 				<Image condition="is">C:\Program Files\Mozilla Firefox\default-browser-agent.exe</Image>
 				<Image condition="is">C:\Program Files\Mozilla Firefox\pingsender.exe</Image>
 				<Image condition="is">C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</Image>
+				<Image condition="contains">\Microsoft SQL Server\MSSQL\</Image>
 				<Rule groupRelation="and">
 					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge\Application\</Image>
 					<Image condition="end with">\BHO\ie_to_edge_stub.exe</Image>
