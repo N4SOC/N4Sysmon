@@ -80,7 +80,7 @@
 				<IntegrityLevel condition="is">AppContainer</IntegrityLevel>				<!--Windows: Don't care about sandboxed processes right now. Will need to revisit this decision.-->
 				<ParentCommandLine condition="begin with">%%SystemRoot%%\system32\csrss.exe ObjectDirectory=\Windows</ParentCommandLine>				<!--Windows:CommandShell: Triggered when programs use the command shell, but doesn't provide attribution for what caused it-->
 				<ParentCommandLine condition="is">C:\windows\system32\wermgr.exe -queuereporting</ParentCommandLine>				<!--Windows:Windows error reporting/telemetry-->
-				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
+				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV--><CommandLine condition="contains">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>				<!-- Microsoft Monitoring Agent-->
 				<CommandLine condition="is">C:\WINDOWS\system32\devicecensus.exe UserCxt</CommandLine>
 				<CommandLine condition="is">C:\Windows\System32\usocoreworker.exe -Embedding</CommandLine>
 				<ParentImage condition="is">C:\Windows\system32\SearchIndexer.exe</ParentImage>				<!--Windows:Search: Launches many uninteresting sub-processes-->
@@ -356,6 +356,11 @@
 				<!--Section: Loopback Addresses-->
 				<DestinationIp condition="is">127.0.0.1</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
+
+				<Rule groupRelation="and">
+					<DestinationPort condition="is">53</DestinationPort>					<!-- HTTPS is really noisy on endpoints - M Rothe-->
+					<Protocol condition="is">udp</Protocol>
+				</Rule>
 			</NetworkConnect>
 		</RuleGroup>
 
@@ -372,6 +377,10 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
+				<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
+				<Image condition="contains">dsa.exe</Image> <!-- Trend Deep Security Binary-->
+				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Malware Scanner Binary-->
+				<Image condition="contains">coreServiceShell.exe</Image> 
 			</ProcessTerminate>
 		</RuleGroup>
 
