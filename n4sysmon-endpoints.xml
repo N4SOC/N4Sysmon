@@ -237,6 +237,9 @@
 				<Image name="T1099" condition="begin with">C:\Users</Image>				<!--Look for timestomping in user area, usually nothing should be doing that here-->
 				<TargetFilename name="T1099" condition="end with">.exe</TargetFilename>				<!--Look for backdated executables anywhere-->
 				<Image name="T1099" condition="begin with">\Device\HarddiskVolumeShadowCopy</Image>				<!--Nothing should be written here | Credit: @SBousseaden [ https://twitter.com/SBousseaden/status/1133030955407630336 ] -->
+				<Image name="technique_id=T1099,technique_name=Timestomp" condition="begin with">C:\Temp</Image>				<!--Look for timestomping in temp folders-->
+				<Image name="technique_id=T1099,technique_name=Timestomp" condition="begin with">C:\Windows\Temp</Image>
+				<Image name="technique_id=T1099,technique_name=Timestomp" condition="begin with">C:\Tmp</Image>
 			</FileCreateTime>
 		</RuleGroup>
 
@@ -281,6 +284,8 @@
 				<Image condition="contains">\Windows\Fonts\</Image>
 				<Image condition="contains">\Windows\IME\</Image>
 				<Image condition="contains">\Windows\addins\</Image>
+				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</Image>
+				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</Image>
 				<!--Suspicious Windows tools-->
 				<Image condition="image">at.exe</Image>				<!--Windows: Remote task scheduling, removed in Win10 | Credit @ion-storm -->
 				<Image condition="image">certutil.exe</Image>				<!--Windows: Certificate tool can contact outbound | Credit @ion-storm @FVT [ https://twitter.com/FVT/status/834433734602530817 ] -->
@@ -319,6 +324,8 @@
 				<Image condition="image">tasklist.exe</Image>				<!--Windows: List processes, has remote ability -->
 				<Image condition="image">wmic.exe</Image>				<!--WindowsManagementInstrumentation: Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 				<Image condition="image">wscript.exe</Image>				<!--WindowsScriptingHost: | Credit @arekfurt -->
+				<Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexec.exe</Image>				<!--Sysinternals:PsExec client side | Credit @Cyb3rOps -->
+				<Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexesvc.exe</Image>				<!--Sysinternals:PsExec server side | Credit @Cyb3rOps -->
 				<!--Live Off the Land Binaries And Scripts (LOLBAS) -->
 				<Image condition="image">bitsadmin.exe</Image>				<!-- Windows: Background Intelligent Transfer Service - Can download from URLs -->
 				<Image condition="image">esentutl.exe</Image>				<!-- Windows: Database utilities for the ESE - Can fetch from UNC paths -->
@@ -345,6 +352,7 @@
 				<Image condition="image">winexesvc.exe</Image>				<!-- Winexe service executable | Credit @Cyb3rOps -->
 				<Image condition="image">nmap.exe</Image>
 				<Image condition="image">psinfo.exe</Image>
+				<Image name="technique_id=T1218,technique_name=Signed Binary Proxy Execution" condition="image">Mavinject.exe</Image>
 				<!--Ports: Suspicious-->
 				<DestinationPort name="SSH" condition="is">22</DestinationPort>				<!--SSH protocol, monitor admin connections-->
 				<DestinationPort name="Telnet" condition="is">23</DestinationPort>				<!--Telnet protocol, monitor admin connections, insecure-->
@@ -366,6 +374,9 @@
 				<DestinationPort name="Emotet" condition="is">20</DestinationPort>
 				<DestinationPort name="Emotet" condition="is">7080</DestinationPort>
 				<DestinationPort name="Emotet" condition="is">50000</DestinationPort>
+				<!--Ports: Windows Management-->
+				<DestinationPort name="technique_id=T1021.006,technique_name=Windows Remote Management" condition="is">5985</DestinationPort>
+				<DestinationPort name="technique_id=T1021.006,technique_name=Windows Remote Management" condition="is">5986</DestinationPort>
 			</NetworkConnect>
 		</RuleGroup>
 
@@ -483,10 +494,85 @@
 		<!--COMMENT:	Monitor for processes accessing other process' memory.-->
 
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
-		<RuleGroup name="" groupRelation="and">
+		<RuleGroup name="" groupRelation="or">
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\PerfLogs\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\$Recycle.bin\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Intel\Logs\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Default\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Public\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\NetworkService\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Fonts\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Debug\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Media\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Help\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\addins\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\repair\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\security\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\system32\config\systemprofile\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">VolumeShadowCopy</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</SourceImage>
+			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\Temp\</SourceImage>
+			<Rule groupRelation="and">
+				<CallTrace name="technique_id=T1059.001,technique_name=PowerShell" condition="contains">System.Management.Automation.ni.dll</CallTrace>
+				<SourceImage condition="is not">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</SourceImage>
+			</Rule>
+			<Rule groupRelation="and" name="technique_id=T1055,technique_name=Process Injection">
+				<SourceImage condition="contains all">C:\Program Files;\Microsoft Office\Root\Office</SourceImage>
+				<CallTrace condition="contains">\Microsoft Shared\VBA</CallTrace>
+			</Rule>
+			<Rule groupRelation="and">
+				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
+				<GrantedAccess>0x1FFFFF</GrantedAccess>				<!--Expect EDRs/AVs to also trigger this-->
+			</Rule>
+			<Rule groupRelation="and">
+				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
+				<GrantedAccess>0x1F1FFF</GrantedAccess>
+			</Rule>
+			<Rule groupRelation="and">
+				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
+				<GrantedAccess>0x1010</GrantedAccess>
+			</Rule>
+			<Rule groupRelation="and">
+				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
+				<GrantedAccess>0x143A</GrantedAccess>
+			</Rule>
 			<ProcessAccess onmatch="include">
-				<TargetImage condition="is">C:\Windows\system32\lsass.exe</TargetImage>
 				<SourceImage condition="end with">powershell.exe</SourceImage>
+				<CallTrace name="technique_id=T1003,technique_name=Credential Dumping" condition="contains">dbghelp.dll</CallTrace>
+				<CallTrace name="technique_id=T1003,technique_name=Credential Dumping" condition="contains">dbgcore.dll</CallTrace>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\csrss.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\wininit.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\winlogon.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\services.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+			</ProcessAccess>
+			<ProcessAccess onmatch="exclude">
+				<SourceImage condition="end with">wmiprvse.exe</SourceImage>
+				<SourceImage condition="end with">GoogleUpdate.exe</SourceImage>
+				<SourceImage condition="end with">LTSVC.exe</SourceImage>
+				<SourceImage condition="end with">taskmgr.exe</SourceImage>
+				<SourceImage condition="end with">VBoxService.exe</SourceImage>				<!-- Virtual Box -->
+				<SourceImage condition="end with">vmtoolsd.exe</SourceImage>				<!-- VMWare -->
+				<SourceImage condition="end with">\Citrix\System32\wfshell.exe</SourceImage>				<!--Citrix process in C:\Program Files (x86)\Citrix\System32\wfshell.exe -->
+				<SourceImage condition="is">C:\Windows\System32\lsm.exe</SourceImage>				<!-- System process under C:\Windows\System32\lsm.exe -->
+				<SourceImage condition="end with">Microsoft.Identity.AadConnect.Health.AadSync.Host.exe</SourceImage>				<!-- Microsoft Azure AD Connect Health Sync Agent -->
+				<SourceImage condition="begin with">C:\Program Files (x86)\Symantec\Symantec Endpoint Protection</SourceImage>				<!-- Symantec -->
+				<GrantedAccess>0x1000</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION Generic call, quite noisy and tells not much-->
+				<GrantedAccess>0x1400</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION + PROCESS_QUERY_INFORMATION Generic call, quite noisy and tells nothing-->
+				<GrantedAccess>0x101400</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION + PROCESS_QUERY_INFORMATION + SYNCHRONIZE Generic call, quite noisy and tells nothing-->
+				<GrantedAccess>0x101000</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION + SYNCHRONIZE Generic call, quite noisy and tells nothing-->
 			</ProcessAccess>
 		</RuleGroup>
 
@@ -838,6 +924,7 @@
 		<!--NOTE: Other filesystem minifilters can make it appear to Sysmon that some files are being written twice. This is not a Sysmon issue, per Mark Russinovich.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime, Hash-->
+		<RuleGroup name="" groupRelation="or">
 		<FileCreateStreamHash onmatch="include">
 			<TargetFilename condition="contains">Downloads</TargetFilename>			<!--Downloaded files. Does not include "Run" files in IE-->
 			<TargetFilename condition="contains">Temp\7z</TargetFilename>			<!--7zip extractions-->
@@ -856,7 +943,11 @@
 			<TargetFilename condition="end with">.vbe</TargetFilename>			<!--VisualBasicScripting files-->
 			<TargetFilename condition="end with">.vbs</TargetFilename>			<!--VisualBasicScripting files-->
 			<TargetFilename condition="end with">.exe</TargetFilename>			<!--Executables-->
+			<TargetFilename condition="end with">Temp\debug.bin</TargetFilename> <!--Bin files https://github.com/GhostPack/SafetyKatz creates debug.bin in a temp folder-->
+			<TargetFilename condition="contains">Content.Outlook</TargetFilename> <!--Microsoft:Outlook: Attachments-->
+
 		</FileCreateStreamHash>
+		</RuleGroup>
 
 		<RuleGroup name="" groupRelation="or">
 			<FileCreateStreamHash onmatch="exclude">
@@ -880,7 +971,11 @@
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, PipeName, Image-->
 		<RuleGroup name="" groupRelation="or">
 			<PipeEvent onmatch="include">
-				<!--NOTE: Using incide with no rules means nothing in this section will be logged-->
+				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msf-pipe</PipeName>				<!-- default metasploit pipe name-->
+				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msagent_</PipeName>				<!-- default cobalt strike pipe name-->
+				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\PSEXESVC</PipeName>
+				<PipeName name="technique_id=T1049,technique_name=System Network Connections Discovery" condition="begin with">\srvsvc</PipeName>				<!--session enumeration-->
+				<PipeName name="technique_id=T1033,technique_name=System Owner/User Discovery" condition="begin with">\winreg</PipeName>				<!--also used in lateral movement-->
 			</PipeEvent>
 		</RuleGroup>
 
