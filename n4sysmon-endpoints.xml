@@ -495,49 +495,49 @@
 
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
 		<RuleGroup name="" groupRelation="or">
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\PerfLogs\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\$Recycle.bin\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Intel\Logs\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Default\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Public\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\NetworkService\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Fonts\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Debug\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Media\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Help\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\addins\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\repair\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\security\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\system32\config\systemprofile\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">VolumeShadowCopy</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</SourceImage>
-			<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\Temp\</SourceImage>
-			<Rule groupRelation="and">
-				<CallTrace name="technique_id=T1059.001,technique_name=PowerShell" condition="contains">System.Management.Automation.ni.dll</CallTrace>
-				<SourceImage condition="is not">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</SourceImage>
-			</Rule>
-			<Rule groupRelation="and" name="technique_id=T1055,technique_name=Process Injection">
-				<SourceImage condition="contains all">C:\Program Files;\Microsoft Office\Root\Office</SourceImage>
-				<CallTrace condition="contains">\Microsoft Shared\VBA</CallTrace>
-			</Rule>
-			<Rule groupRelation="and">
-				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
-				<GrantedAccess>0x1FFFFF</GrantedAccess>				<!--Expect EDRs/AVs to also trigger this-->
-			</Rule>
-			<Rule groupRelation="and">
-				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
-				<GrantedAccess>0x1F1FFF</GrantedAccess>
-			</Rule>
-			<Rule groupRelation="and">
-				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
-				<GrantedAccess>0x1010</GrantedAccess>
-			</Rule>
-			<Rule groupRelation="and">
-				<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>				<!--Mitre T1098-->				<!--Mitre T1550.002-->				<!--Mitre T1003-->				<!-- depending on what you're running on your host, this might be noisy-->
-				<GrantedAccess>0x143A</GrantedAccess>
-			</Rule>
 			<ProcessAccess onmatch="include">
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\PerfLogs\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\$Recycle.bin\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Intel\Logs\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Default\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Public\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\NetworkService\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Fonts\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Debug\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Media\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Help\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\addins\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\repair\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\security\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\system32\config\systemprofile\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">VolumeShadowCopy</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\Temp\</SourceImage>
+				<Rule groupRelation="and">
+					<CallTrace name="technique_id=T1059.001,technique_name=PowerShell" condition="contains">System.Management.Automation.ni.dll</CallTrace>
+					<SourceImage condition="is not">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</SourceImage>
+				</Rule>
+				<Rule groupRelation="and" name="technique_id=T1055,technique_name=Process Injection">
+					<SourceImage condition="contains all">C:\Program Files;\Microsoft Office\Root\Office</SourceImage>
+					<CallTrace condition="contains">\Microsoft Shared\VBA</CallTrace>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1FFFFF</GrantedAccess>					<!--Expect EDRs/AVs to also trigger this-->
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1010</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x143A</GrantedAccess>
+				</Rule>
 				<SourceImage condition="end with">powershell.exe</SourceImage>
 				<CallTrace name="technique_id=T1003,technique_name=Credential Dumping" condition="contains">dbghelp.dll</CallTrace>
 				<CallTrace name="technique_id=T1003,technique_name=Credential Dumping" condition="contains">dbgcore.dll</CallTrace>
@@ -558,6 +558,8 @@
 					<GrantedAccess>0x1F1FFF</GrantedAccess>
 				</Rule>
 			</ProcessAccess>
+		</RuleGroup>
+		<RuleGroup name="" groupRelation="or">
 			<ProcessAccess onmatch="exclude">
 				<SourceImage condition="end with">wmiprvse.exe</SourceImage>
 				<SourceImage condition="end with">GoogleUpdate.exe</SourceImage>
@@ -925,28 +927,27 @@
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime, Hash-->
 		<RuleGroup name="" groupRelation="or">
-		<FileCreateStreamHash onmatch="include">
-			<TargetFilename condition="contains">Downloads</TargetFilename>			<!--Downloaded files. Does not include "Run" files in IE-->
-			<TargetFilename condition="contains">Temp\7z</TargetFilename>			<!--7zip extractions-->
-			<TargetFilename condition="contains">Startup</TargetFilename>			<!--ADS startup | Example: [ https://www.hybrid-analysis.com/sample/a314f6106633fba4b70f9d6ddbee452e8f8f44a72117749c21243dc93c7ed3ac?environmentId=100 ] -->
-			<TargetFilename condition="end with">.bat</TargetFilename>			<!--Batch scripting-->
-			<TargetFilename condition="end with">.cmd</TargetFilename>			<!--Batch scripting | Credit @ion-storm -->
-			<TargetFilename condition="end with">.doc</TargetFilename>			<!--Office doc potentially with macro -->
-			<TargetFilename condition="end with">.hta</TargetFilename>			<!--Scripting-->
-			<TargetFilename condition="end with">.lnk</TargetFilename>			<!--Shortcut file | Credit @ion-storm -->
-			<TargetFilename condition="end with">.ppt</TargetFilename>			<!--Office doc potentially with macros-->
-			<TargetFilename condition="end with">.ps1</TargetFilename>			<!--PowerShell-->
-			<TargetFilename condition="end with">.ps2</TargetFilename>			<!--PowerShell-->
-			<TargetFilename condition="end with">.reg</TargetFilename>			<!--Registry File-->
-			<TargetFilename condition="end with">.jse</TargetFilename>			<!--Registry File-->
-			<TargetFilename condition="end with">.vb</TargetFilename>			<!--VisualBasicScripting files-->
-			<TargetFilename condition="end with">.vbe</TargetFilename>			<!--VisualBasicScripting files-->
-			<TargetFilename condition="end with">.vbs</TargetFilename>			<!--VisualBasicScripting files-->
-			<TargetFilename condition="end with">.exe</TargetFilename>			<!--Executables-->
-			<TargetFilename condition="end with">Temp\debug.bin</TargetFilename> <!--Bin files https://github.com/GhostPack/SafetyKatz creates debug.bin in a temp folder-->
-			<TargetFilename condition="contains">Content.Outlook</TargetFilename> <!--Microsoft:Outlook: Attachments-->
-
-		</FileCreateStreamHash>
+			<FileCreateStreamHash onmatch="include">
+				<TargetFilename condition="contains">Downloads</TargetFilename>				<!--Downloaded files. Does not include "Run" files in IE-->
+				<TargetFilename condition="contains">Temp\7z</TargetFilename>				<!--7zip extractions-->
+				<TargetFilename condition="contains">Startup</TargetFilename>				<!--ADS startup | Example: [ https://www.hybrid-analysis.com/sample/a314f6106633fba4b70f9d6ddbee452e8f8f44a72117749c21243dc93c7ed3ac?environmentId=100 ] -->
+				<TargetFilename condition="end with">.bat</TargetFilename>				<!--Batch scripting-->
+				<TargetFilename condition="end with">.cmd</TargetFilename>				<!--Batch scripting | Credit @ion-storm -->
+				<TargetFilename condition="end with">.doc</TargetFilename>				<!--Office doc potentially with macro -->
+				<TargetFilename condition="end with">.hta</TargetFilename>				<!--Scripting-->
+				<TargetFilename condition="end with">.lnk</TargetFilename>				<!--Shortcut file | Credit @ion-storm -->
+				<TargetFilename condition="end with">.ppt</TargetFilename>				<!--Office doc potentially with macros-->
+				<TargetFilename condition="end with">.ps1</TargetFilename>				<!--PowerShell-->
+				<TargetFilename condition="end with">.ps2</TargetFilename>				<!--PowerShell-->
+				<TargetFilename condition="end with">.reg</TargetFilename>				<!--Registry File-->
+				<TargetFilename condition="end with">.jse</TargetFilename>				<!--Registry File-->
+				<TargetFilename condition="end with">.vb</TargetFilename>				<!--VisualBasicScripting files-->
+				<TargetFilename condition="end with">.vbe</TargetFilename>				<!--VisualBasicScripting files-->
+				<TargetFilename condition="end with">.vbs</TargetFilename>				<!--VisualBasicScripting files-->
+				<TargetFilename condition="end with">.exe</TargetFilename>				<!--Executables-->
+				<TargetFilename condition="end with">Temp\debug.bin</TargetFilename>				<!--Bin files https://github.com/GhostPack/SafetyKatz creates debug.bin in a temp folder-->
+				<TargetFilename condition="contains">Content.Outlook</TargetFilename>				<!--Microsoft:Outlook: Attachments-->
+			</FileCreateStreamHash>
 		</RuleGroup>
 
 		<RuleGroup name="" groupRelation="or">
