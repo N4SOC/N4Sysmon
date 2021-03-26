@@ -379,13 +379,15 @@
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
 				<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
 				<Image condition="contains">dsa.exe</Image> <!-- Trend Deep Security Binary-->
-				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Malware Scanner Binary-->
-				<Image condition="contains">coreServiceShell.exe</Image> 
+				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
+				<Image condition="contains">coreServiceShell.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
+				<Image condition="contains">MsMpEng.exe</Image> <!-- MS Defender-->
 			</ProcessTerminate>
 		</RuleGroup>
 
 		<RuleGroup name="" groupRelation="or">
 			<ProcessTerminate onmatch="exclude">
+			<Image condition="contains">Teams.exe</Image> 
 			</ProcessTerminate>
 		</RuleGroup>
 

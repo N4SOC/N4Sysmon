@@ -223,6 +223,11 @@
 				<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FCHelper64.exe</Image>				<!--Forticlient-->
 				<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image>				<!-- MS Teams -->
 				<Image condition="is">C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\FullTrustNotifier.exe</Image>				<!--Acrobat Reader-->
+				<Image condition="is">C:\Windows\System32\taskhostw.exe</Image>				<!--Windows task host process-->
+				<Image condition="is">C:\Windows\servicing\TrustedInstaller.exe</Image>				<!--Windows installer process-->
+				<Image condition="is">C:\Windows\System32\mousocoreworker.exe </Image>				<!--Windows update process-->
+
+
 			</ProcessCreate>
 		</RuleGroup>
 
@@ -562,6 +567,15 @@
 				<!--SECTION: Windows:Updates-->
 				<TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\</TargetFilename>				<!-- Windows: Feature updates containing lots of .exe and .sys-->
 				<Image condition="begin with">C:\Windows\winsxs\amd64_microsoft-windows</Image>				<!-- Windows: Windows update-->
+			<!--SECTION: Node4 Custom-->
+
+				<Image condition="end with">Microsoft\Teams\Update.exe</Image>	<!-- Teams update creates lots of files - M Rothe -->
+				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\winagent.exe</Image> <!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
+				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\patchman\ThirdPartyPatch\ThirdPartyPatch.exe</Image> <!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
+				<Image condition="is">	C:\Program Files\ESET\ESET Security\ekrn.exe</Image> <!-- ESET creates lots of files - M Rothe -->
+				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.YourPhone_</TargetFilename> <!-- lots of files created here - M Rothe -->
+				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.CompanyPortal_</TargetFilename><!-- lots of files created here - M Rothe -->
+				<TargetFilename condition="begin with">	C:\PROGRA~2\ADVANC~1\downloads\update</TargetFilename> <!-- Solarwind MSP dumps lots of files here - M Rothe -->
 			</FileCreate>
 		</RuleGroup>
 
@@ -1116,6 +1130,9 @@
 				<QueryName condition="is">n4corp.node4.co.uk</QueryName>
 				<QueryName condition="is">spocs.getpocket.com</QueryName>
 				<QueryName condition="is">forticlient.fortinet.net</QueryName>
+				<QueryName condition="is">​autodiscover-s.outlook.com</QueryName>
+				<QueryName condition="is">​api.segment.io</QueryName> <!-- noisy analytics domain-->
+				<QueryName condition="is">​	acdc-direct.office.com</QueryName> <!-- MS Teams domain-->
 
 			</DnsQuery>
 		</RuleGroup>
