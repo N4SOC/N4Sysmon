@@ -80,11 +80,6 @@
 				<IntegrityLevel condition="is">AppContainer</IntegrityLevel>				<!--Windows: Don't care about sandboxed processes right now. Will need to revisit this decision.-->
 				<ParentCommandLine condition="begin with">%%SystemRoot%%\system32\csrss.exe ObjectDirectory=\Windows</ParentCommandLine>				<!--Windows:CommandShell: Triggered when programs use the command shell, but doesn't provide attribution for what caused it-->
 				<ParentCommandLine condition="is">C:\windows\system32\wermgr.exe -queuereporting</ParentCommandLine>				<!--Windows:Windows error reporting/telemetry-->
-
-				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
-				<CommandLine condition="contains">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>				<!-- Microsoft Monitoring Agent-->
-
-
 				<CommandLine condition="is">C:\WINDOWS\system32\devicecensus.exe UserCxt</CommandLine>
 				<CommandLine condition="is">C:\Windows\System32\usocoreworker.exe -Embedding</CommandLine>
 				<ParentImage condition="is">C:\Windows\system32\SearchIndexer.exe</ParentImage>				<!--Windows:Search: Launches many uninteresting sub-processes-->
@@ -226,6 +221,8 @@
 				<Image condition="is">C:\Windows\System32\taskhostw.exe</Image>				<!--Windows task host process-->
 				<Image condition="is">C:\Windows\servicing\TrustedInstaller.exe</Image>				<!--Windows installer process-->
 				<Image condition="is">C:\Windows\System32\mousocoreworker.exe </Image>				<!--Windows update process-->
+				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
+				<CommandLine condition="contains">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>				<!-- Microsoft Monitoring Agent-->
 
 
 			</ProcessCreate>
@@ -382,6 +379,10 @@
 				<DestinationHostname condition="end with">.microsoft.com</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.akadns.net</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.nsatc.net</DestinationHostname>				<!--Microsoft:Update delivery-->
+				<!--OCSP known addresses-->
+				<DestinationIp condition="is">23.4.43.27</DestinationIp>				<!--Digicert [ https://otx.alienvault.com/indicator/ip/23.4.43.27 ] -->
+				<DestinationIp condition="is">72.21.91.29</DestinationIp>
+
 				<!--Section: Loopback Addresses-->
 				<DestinationIp condition="is">127.0.0.1</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
@@ -406,7 +407,7 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
-				<Image condition="is">ekrn.exe</Image>	<!-- ESET Binary-->
+				<Image condition="is">ekrn.exe</Image>				<!-- ESET Binary-->
 			</ProcessTerminate>
 		</RuleGroup>
 
@@ -544,6 +545,7 @@
 				<TargetFilename condition="begin with">C:\Windows\AppPatch\Custom</TargetFilename>				<!--Windows: Application compatibility shims [ https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html ] -->
 				<TargetFilename condition="contains">VirtualStore</TargetFilename>				<!--Windows: UAC virtualization [ https://blogs.msdn.microsoft.com/oldnewthing/20150902-00/?p=91681 ] -->
 				<!--Exploitable file names-->
+				<TargetFilename condition="end with">.ocx</TargetFilename>				<!--Anyone using ActiveX? LOL-->
 				<TargetFilename condition="end with">.xls</TargetFilename>				<!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.ppt</TargetFilename>				<!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.rtf</TargetFilename>				<!--RTF files often 0day malware vectors when opened by Office-->
@@ -567,15 +569,15 @@
 				<!--SECTION: Windows:Updates-->
 				<TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\</TargetFilename>				<!-- Windows: Feature updates containing lots of .exe and .sys-->
 				<Image condition="begin with">C:\Windows\winsxs\amd64_microsoft-windows</Image>				<!-- Windows: Windows update-->
-			<!--SECTION: Node4 Custom-->
+				<!--SECTION: Node4 Custom-->
 
-				<Image condition="end with">Microsoft\Teams\Update.exe</Image>	<!-- Teams update creates lots of files - M Rothe -->
-				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\winagent.exe</Image> <!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
-				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\patchman\ThirdPartyPatch\ThirdPartyPatch.exe</Image> <!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
-				<Image condition="is">	C:\Program Files\ESET\ESET Security\ekrn.exe</Image> <!-- ESET creates lots of files - M Rothe -->
-				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.YourPhone_</TargetFilename> <!-- lots of files created here - M Rothe -->
-				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.CompanyPortal_</TargetFilename><!-- lots of files created here - M Rothe -->
-				<TargetFilename condition="begin with">	C:\PROGRA~2\ADVANC~1\downloads\update</TargetFilename> <!-- Solarwind MSP dumps lots of files here - M Rothe -->
+				<Image condition="end with">Microsoft\Teams\Update.exe</Image>				<!-- Teams update creates lots of files - M Rothe -->
+				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\winagent.exe</Image>				<!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
+				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\patchman\ThirdPartyPatch\ThirdPartyPatch.exe</Image>				<!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
+				<Image condition="is">	C:\Program Files\ESET\ESET Security\ekrn.exe</Image>				<!-- ESET creates lots of files - M Rothe -->
+				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.YourPhone_</TargetFilename>				<!-- lots of files created here - M Rothe -->
+				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.CompanyPortal_</TargetFilename>				<!-- lots of files created here - M Rothe -->
+				<TargetFilename condition="begin with">	C:\PROGRA~2\ADVANC~1\downloads\update</TargetFilename>				<!-- Solarwind MSP dumps lots of files here - M Rothe -->
 			</FileCreate>
 		</RuleGroup>
 
@@ -674,6 +676,8 @@
 				<TargetObject name="T1101" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Lsa\</TargetObject>				<!-- [ https://attack.mitre.org/wiki/Technique/T1131 ] [ https://attack.mitre.org/wiki/Technique/T1101 ] -->
 				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\</TargetObject>				<!--Windows: Changes to WDigest-UseLogonCredential for password scraping [ https://www.trustedsec.com/april-2015/dumping-wdigest-creds-with-meterpreter-mimikatzkiwi-in-windows-8-1/ ] -->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Netsh</TargetObject>				<!--Windows: Netsh helper DLL [ https://attack.mitre.org/wiki/Technique/T1128 ] -->
+				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SecurityProviders</TargetObject>				<!--Windows: Changes to WDigest-UseLogonCredential for password scraping [ https://www.trustedsec.com/april-2015/dumping-wdigest-creds-with-meterpreter-mimikatzkiwi-in-windows-8-1/ ] -->
+				<TargetObject condition="contains">Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyEnable</TargetObject>				<!--Windows: Malware often disables a web proxy for 2nd stage downloads -->
 				<!--Networking-->
 				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider\Order\</TargetObject>				<!--Windows: Order of network providers that are checked to connect to destination [ https://www.malwarearchaeology.com/cheat-sheets ] -->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles</TargetObject>				<!--Windows: | Credit @ion-storm -->
@@ -723,6 +727,8 @@
 				<TargetObject name="T1138,AppCompatShim" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\InstalledSDB</TargetObject>				<!--Windows: AppCompat [ https://attack.mitre.org/wiki/Technique/T1138 ] -->
 				<TargetObject condition="contains">VirtualStore</TargetObject>				<!--Windows: Registry virtualization, something's wrong if it's in use [ https://msdn.microsoft.com/en-us/library/windows/desktop/aa965884(v=vs.85).aspx ] -->
 				<!--Windows internals integrity monitoring-->
+				<TargetObject name="Context,DeviceConnectedOrUpdated" condition="end with">\FriendlyName</TargetObject>				<!--Windows: New devices connected and remembered-->
+				<TargetObject name="Context,ProcessAccessedPrivateResource" condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\</TargetObject>				<!-- Windows: Win10 tracks when and what process uses webcam/microphone/location etc [ https://medium.com/@7a616368/can-you-track-processes-accessing-the-camera-and-microphone-7e6885b37072 ] -->
 				<TargetObject name="T1183,IFEO" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\</TargetObject>				<!--Windows: Malware likes changing IFEO, like adding Debugger to disable antivirus EXE-->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\</TargetObject>				<!--Windows: Event log system integrity and ACLs-->
 				<TargetObject name="Tamper-Safemode" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Safeboot\</TargetObject>				<!--Windows: Services approved to load in safe mode. Almost nothing should ever modify this.-->
@@ -749,6 +755,7 @@
 				<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\InstalledSDB</TargetObject>				<!-- Custom SHIM:FireEye FIN7 report - https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html -->
 				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\services\DNS\Parameters\</TargetObject>				<!--Microsoft:Windows:DNS: ServerLevelPluginDll Issue https://medium.com/@esnesenon/feature-not-bug-dnsadmin-to-dc-compromise-in-one-line-a0f779b8dc83 -->
 				<!--Suspicious sources-->
+				<Image name="Suspicious" condition="end with">regedit.exe</Image>				<!--Users and helpdesk staff making system modifications -->
 				<Image name="Suspicious,ImageBeginWithBackslash" condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
 			</RegistryEvent>
 		</RuleGroup>
@@ -987,6 +994,8 @@
 				<QueryName condition="is">clients5.google.com</QueryName>				<!--Google-->
 				<QueryName condition="is">clients6.google.com</QueryName>				<!--Google-->
 				<QueryName condition="is">safebrowsing.googleapis.com</QueryName>				<!--Google-->
+				<QueryName condition="end with">.adobe.com</QueryName>				<!--Adobe-->
+				<QueryName condition="end with">.adobe.io</QueryName>
 				<!--Goodlist CDN-->
 				<QueryName condition="end with">.akadns.net</QueryName>				<!--AkamaiCDN, extensively used by Microsoft | Microsoft default exclusion-->
 				<QueryName condition="end with">.netflix.com</QueryName>
@@ -998,6 +1007,8 @@
 				<QueryName condition="is">cdnjs.cloudflare.com</QueryName>
 				<QueryName condition="end with">.stackassets.com</QueryName>				<!--Stack Overflow-->
 				<QueryName condition="end with">.steamcontent.com</QueryName>
+				<QueryName condition="is">play.google.com</QueryName>
+				<QueryName condition="is">content-autofill.googleapis.com</QueryName>
 				<!--Web resources-->
 				<QueryName condition="end with">.disqus.com</QueryName>				<!--Microsoft default exclusion-->
 				<QueryName condition="end with">.fontawesome.com</QueryName>
@@ -1104,7 +1115,19 @@
 				<QueryName condition="end with">.digicert.com</QueryName>
 				<QueryName condition="end with">.globalsign.com</QueryName>
 				<QueryName condition="end with">.globalsign.net</QueryName>
+				<QueryName condition="end with">.intel.com</QueryName>
+				<QueryName condition="end with">.symcb.com</QueryName>				<!--Digicert-->
+				<QueryName condition="end with">.symcd.com</QueryName>				<!--Digicert-->
+				<QueryName condition="end with">.thawte.com</QueryName>
+				<QueryName condition="end with">.usertrust.com</QueryName>
+				<QueryName condition="end with">.verisign.com</QueryName>
+				<QueryName condition="end with">ocsp.identrust.com</QueryName>
+				<QueryName condition="end with">pki.goog</QueryName>
 				<QueryName condition="is">msocsp.com</QueryName>				<!--Microsoft:OCSP-->
+				<QueryName condition="is">ocsp.comodoca.com</QueryName>
+				<QueryName condition="is">ocsp.entrust.net</QueryName>
+				<QueryName condition="is">ocsp.godaddy.com</QueryName>
+				<QueryName condition="is">ocsp.int-x3.letsencrypt.org</QueryName>
 				<QueryName condition="is">ocsp.msocsp.com</QueryName>				<!--Microsoft:OCSP-->
 				<QueryName condition="end with">pki.goog</QueryName>
 				<QueryName condition="is">ocsp.godaddy.com</QueryName>
@@ -1116,11 +1139,11 @@
 				<QueryName condition="is">ocsp.verisign.com</QueryName>
 				<QueryName condition="is">ocsp.entrust.net</QueryName>
 				<QueryName condition="end with">ocsp.identrust.com</QueryName>
-				<QueryName condition="end with">outlook.office.com</QueryName>
 				<QueryName condition="is">status.rapidssl.com</QueryName>
 				<QueryName condition="is">status.thawte.com</QueryName>
 				<QueryName condition="is">ocsp.int-x3.letsencrypt.org</QueryName>
 
+				<QueryName condition="end with">outlook.office.com</QueryName>
 				<QueryName condition="end with">n-able.com</QueryName>				<!-- Solarwinds MSP generates lots of DNS noise-->
 				<QueryName condition="end with">systemmonitor.co.uk</QueryName>				<!-- Solarwinds MSP generates lots of DNS noise-->
 				<QueryName condition="end with">wbx2.com</QueryName>				<!-- Webex generates lots of DNS noise-->
@@ -1131,8 +1154,8 @@
 				<QueryName condition="is">spocs.getpocket.com</QueryName>
 				<QueryName condition="is">forticlient.fortinet.net</QueryName>
 				<QueryName condition="is">​autodiscover-s.outlook.com</QueryName>
-				<QueryName condition="is">​api.segment.io</QueryName> <!-- noisy analytics domain-->
-				<QueryName condition="is">​	acdc-direct.office.com</QueryName> <!-- MS Teams domain-->
+				<QueryName condition="is">​api.segment.io</QueryName>				<!-- noisy analytics domain-->
+				<QueryName condition="is">​	acdc-direct.office.com</QueryName>				<!-- MS Teams domain-->
 
 			</DnsQuery>
 		</RuleGroup>
@@ -1160,9 +1183,12 @@
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
 			<ClipboardChange onmatch="include">
+				<Image condition="end with">wscript.exe</Image>
+				<Image condition="end with">cscript.exe</Image>
+				<Image condition="end with">powershell.exe</Image>
+				<Image condition="end with">rdpclip.exe</Image>
 			</ClipboardChange>
 		</RuleGroup>
-
 		<!--SYSMON EVENT ID 255 : ERROR-->
 		<!--"This event is generated when an error occurred within Sysmon. They can happen if the system is under heavy load
 			and certain tasked could not be performed or a bug exists in the Sysmon service. You can report any bugs on the
