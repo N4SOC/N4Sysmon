@@ -80,7 +80,6 @@
 				<IntegrityLevel condition="is">AppContainer</IntegrityLevel>				<!--Windows: Don't care about sandboxed processes right now. Will need to revisit this decision.-->
 				<ParentCommandLine condition="begin with">%%SystemRoot%%\system32\csrss.exe ObjectDirectory=\Windows</ParentCommandLine>				<!--Windows:CommandShell: Triggered when programs use the command shell, but doesn't provide attribution for what caused it-->
 				<ParentCommandLine condition="is">C:\windows\system32\wermgr.exe -queuereporting</ParentCommandLine>				<!--Windows:Windows error reporting/telemetry-->
-				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV--><CommandLine condition="contains">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>				<!-- Microsoft Monitoring Agent-->
 				<CommandLine condition="is">C:\WINDOWS\system32\devicecensus.exe UserCxt</CommandLine>
 				<CommandLine condition="is">C:\Windows\System32\usocoreworker.exe -Embedding</CommandLine>
 				<ParentImage condition="is">C:\Windows\system32\SearchIndexer.exe</ParentImage>				<!--Windows:Search: Launches many uninteresting sub-processes-->
@@ -167,8 +166,7 @@
 				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs</ParentCommandLine>				<!--Windows: Network services: Spawns Consent.exe-->
 				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</ParentCommandLine>				<!--Windows-->
 				<CommandLine condition="is">C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM</CommandLine>				<!--Windows: AzureAD device enrollment agent-->
-				<!--SECTION: Microsoft:Edge-->
-				<CommandLine condition="begin with">"C:\Program Files (x86)\Microsoft\Edge Dev\Application\msedge.exe" --type=</CommandLine>
+
 				<!--SECTION: Microsoft:dotNet-->
 				<CommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe</CommandLine>				<!--Microsoft:DotNet-->
 				<CommandLine condition="begin with">C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Ngen.exe</CommandLine>				<!--Microsoft:DotNet-->
@@ -197,10 +195,36 @@
 				<!--SECTION: Google-->
 				<CommandLine condition="begin with">"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --type=</CommandLine>				<!--Google:Chrome: massive command-line arguments-->
 				<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine>				<!--Google:Chrome: massive command-line arguments-->
+				<Image condition="is">C:\Program Files (x86)\Google\Update\GoogleUpdate.exe</Image>
 				<Rule groupRelation="and">					<!-- https://github.com/olafhartong/sysmon-modular/issues/26 -->
 					<ParentCommandLine condition="is">"C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe" -Embedding</ParentCommandLine>
 					<CommandLine condition="is">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>					<!--Microsoft Sentinel SIEM agent, based on MOM-->
 				</Rule>
+				<!--MS Edge-->
+				<Rule groupRelation="and">
+					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge</Image>
+					<Image condition="end with">identity_helper.exe</Image>
+				</Rule>
+				<Rule groupRelation="and">
+					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge</Image>
+					<Image condition="end with">msedge.exe</Image>
+				</Rule>
+				<Rule groupRelation="and">
+					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge</Image>
+					<Image condition="end with">MicrosoftEdgeUpdate.exe</Image>
+				</Rule>
+
+				<Image condition="is">C:\Windows\System32\msfeedssync.exe</Image>				<!--MS Feed sync-->
+				<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FCHelper64.exe</Image>				<!--Forticlient-->
+				<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image>				<!-- MS Teams -->
+				<Image condition="is">C:\Program Files (x86)\Adobe\Acrobat Reader DC\Reader\FullTrustNotifier.exe</Image>				<!--Acrobat Reader-->
+				<Image condition="is">C:\Windows\System32\taskhostw.exe</Image>				<!--Windows task host process-->
+				<Image condition="is">C:\Windows\servicing\TrustedInstaller.exe</Image>				<!--Windows installer process-->
+				<Image condition="is">C:\Windows\System32\mousocoreworker.exe </Image>				<!--Windows update process-->
+				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
+				<CommandLine condition="contains">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>				<!-- Microsoft Monitoring Agent-->
+
+
 			</ProcessCreate>
 		</RuleGroup>
 
@@ -213,6 +237,9 @@
 				<Image name="T1099" condition="begin with">C:\Users</Image>				<!--Look for timestomping in user area, usually nothing should be doing that here-->
 				<TargetFilename name="T1099" condition="end with">.exe</TargetFilename>				<!--Look for backdated executables anywhere-->
 				<Image name="T1099" condition="begin with">\Device\HarddiskVolumeShadowCopy</Image>				<!--Nothing should be written here | Credit: @SBousseaden [ https://twitter.com/SBousseaden/status/1133030955407630336 ] -->
+				<Image name="technique_id=T1099,technique_name=Timestomp" condition="begin with">C:\Temp</Image>				<!--Look for timestomping in temp folders-->
+				<Image name="technique_id=T1099,technique_name=Timestomp" condition="begin with">C:\Windows\Temp</Image>
+				<Image name="technique_id=T1099,technique_name=Timestomp" condition="begin with">C:\Tmp</Image>
 			</FileCreateTime>
 		</RuleGroup>
 
@@ -257,6 +284,8 @@
 				<Image condition="contains">\Windows\Fonts\</Image>
 				<Image condition="contains">\Windows\IME\</Image>
 				<Image condition="contains">\Windows\addins\</Image>
+				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</Image>
+				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</Image>
 				<!--Suspicious Windows tools-->
 				<Image condition="image">at.exe</Image>				<!--Windows: Remote task scheduling, removed in Win10 | Credit @ion-storm -->
 				<Image condition="image">certutil.exe</Image>				<!--Windows: Certificate tool can contact outbound | Credit @ion-storm @FVT [ https://twitter.com/FVT/status/834433734602530817 ] -->
@@ -295,6 +324,8 @@
 				<Image condition="image">tasklist.exe</Image>				<!--Windows: List processes, has remote ability -->
 				<Image condition="image">wmic.exe</Image>				<!--WindowsManagementInstrumentation: Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 				<Image condition="image">wscript.exe</Image>				<!--WindowsScriptingHost: | Credit @arekfurt -->
+				<Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexec.exe</Image>				<!--Sysinternals:PsExec client side | Credit @Cyb3rOps -->
+				<Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexesvc.exe</Image>				<!--Sysinternals:PsExec server side | Credit @Cyb3rOps -->
 				<!--Live Off the Land Binaries And Scripts (LOLBAS) -->
 				<Image condition="image">bitsadmin.exe</Image>				<!-- Windows: Background Intelligent Transfer Service - Can download from URLs -->
 				<Image condition="image">esentutl.exe</Image>				<!-- Windows: Database utilities for the ESE - Can fetch from UNC paths -->
@@ -321,6 +352,7 @@
 				<Image condition="image">winexesvc.exe</Image>				<!-- Winexe service executable | Credit @Cyb3rOps -->
 				<Image condition="image">nmap.exe</Image>
 				<Image condition="image">psinfo.exe</Image>
+				<Image name="technique_id=T1218,technique_name=Signed Binary Proxy Execution" condition="image">Mavinject.exe</Image>
 				<!--Ports: Suspicious-->
 				<DestinationPort name="SSH" condition="is">22</DestinationPort>				<!--SSH protocol, monitor admin connections-->
 				<DestinationPort name="Telnet" condition="is">23</DestinationPort>				<!--Telnet protocol, monitor admin connections, insecure-->
@@ -342,6 +374,9 @@
 				<DestinationPort name="Emotet" condition="is">20</DestinationPort>
 				<DestinationPort name="Emotet" condition="is">7080</DestinationPort>
 				<DestinationPort name="Emotet" condition="is">50000</DestinationPort>
+				<!--Ports: Windows Management-->
+				<DestinationPort name="technique_id=T1021.006,technique_name=Windows Remote Management" condition="is">5985</DestinationPort>
+				<DestinationPort name="technique_id=T1021.006,technique_name=Windows Remote Management" condition="is">5986</DestinationPort>
 			</NetworkConnect>
 		</RuleGroup>
 
@@ -350,13 +385,19 @@
 				<!--SECTION: Microsoft-->
 				<Image condition="begin with">C:\ProgramData\Microsoft\Windows Defender\Platform\</Image>
 				<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image>				<!--Microsoft: Teams-->
+				<Image condition="end with">AppData\Roaming\Spotify\Spotify.exe</Image>				<!--Spotify is noisy - M Rothe-->
+				<Image condition="end with">AppData\Local\CiscoSparkLauncher\CiscoCollabHost.exe</Image>				<!--Webex Teams is noisy - M Rothe-->
 				<DestinationHostname condition="end with">.microsoft.com</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.akadns.net</DestinationHostname>				<!--Microsoft:Update delivery-->
 				<DestinationHostname condition="end with">microsoft.com.nsatc.net</DestinationHostname>				<!--Microsoft:Update delivery-->
+				<!--OCSP known addresses-->
+				<DestinationIp condition="is">23.4.43.27</DestinationIp>				<!--Digicert [ https://otx.alienvault.com/indicator/ip/23.4.43.27 ] -->
+				<DestinationIp condition="is">72.21.91.29</DestinationIp>
+
 				<!--Section: Loopback Addresses-->
 				<DestinationIp condition="is">127.0.0.1</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
-
+				<DestinationPort condition="is">443</DestinationPort>				<!-- HTTPS is really noisy on endpoints - M Rothe-->
 				<Rule groupRelation="and">
 					<DestinationPort condition="is">53</DestinationPort>					<!-- HTTPS is really noisy on endpoints - M Rothe-->
 					<Protocol condition="is">udp</Protocol>
@@ -377,7 +418,7 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
-				<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
+								<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
 				<Image condition="contains">dsa.exe</Image> <!-- Trend Deep Security Binary-->
 				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
 				<Image condition="contains">coreServiceShell.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
@@ -460,7 +501,85 @@
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
 		<RuleGroup name="" groupRelation="or">
 			<ProcessAccess onmatch="include">
-				<!--NOTE: Using "include" with no rules means nothing in this section will be logged-->
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\PerfLogs\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\$Recycle.bin\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Intel\Logs\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Default\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\Public\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Users\NetworkService\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Fonts\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Debug\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Media\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\Help\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\addins\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\repair\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\security\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Windows\system32\config\systemprofile\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">VolumeShadowCopy</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</SourceImage>
+				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="contains">\Temp\</SourceImage>
+				<Rule groupRelation="and">
+					<CallTrace name="technique_id=T1059.001,technique_name=PowerShell" condition="contains">System.Management.Automation.ni.dll</CallTrace>
+					<SourceImage condition="is not">C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</SourceImage>
+				</Rule>
+				<Rule groupRelation="and" name="technique_id=T1055,technique_name=Process Injection">
+					<SourceImage condition="contains all">C:\Program Files;\Microsoft Office\Root\Office</SourceImage>
+					<CallTrace condition="contains">\Microsoft Shared\VBA</CallTrace>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1FFFFF</GrantedAccess>					<!--Expect EDRs/AVs to also trigger this-->
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1010</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x143A</GrantedAccess>
+				</Rule>
+				<SourceImage condition="end with">powershell.exe</SourceImage>
+				<CallTrace name="technique_id=T1003,technique_name=Credential Dumping" condition="contains">dbghelp.dll</CallTrace>
+				<CallTrace name="technique_id=T1003,technique_name=Credential Dumping" condition="contains">dbgcore.dll</CallTrace>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\csrss.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\wininit.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\winlogon.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+				<Rule groupRelation="and">
+					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\services.exe</TargetImage>					<!--Mitre T1098-->					<!--Mitre T1550.002-->					<!--Mitre T1003-->					<!-- depending on what you're running on your host, this might be noisy-->
+					<GrantedAccess>0x1F1FFF</GrantedAccess>
+				</Rule>
+			</ProcessAccess>
+		</RuleGroup>
+		<RuleGroup name="" groupRelation="or">
+			<ProcessAccess onmatch="exclude">
+				<SourceImage condition="end with">wmiprvse.exe</SourceImage>
+				<SourceImage condition="end with">GoogleUpdate.exe</SourceImage>
+				<SourceImage condition="end with">LTSVC.exe</SourceImage>
+				<SourceImage condition="end with">taskmgr.exe</SourceImage>
+				<SourceImage condition="end with">VBoxService.exe</SourceImage>				<!-- Virtual Box -->
+				<SourceImage condition="end with">vmtoolsd.exe</SourceImage>				<!-- VMWare -->
+				<SourceImage condition="end with">\Citrix\System32\wfshell.exe</SourceImage>				<!--Citrix process in C:\Program Files (x86)\Citrix\System32\wfshell.exe -->
+				<SourceImage condition="is">C:\Windows\System32\lsm.exe</SourceImage>				<!-- System process under C:\Windows\System32\lsm.exe -->
+				<SourceImage condition="end with">Microsoft.Identity.AadConnect.Health.AadSync.Host.exe</SourceImage>				<!-- Microsoft Azure AD Connect Health Sync Agent -->
+				<SourceImage condition="begin with">C:\Program Files (x86)\Symantec\Symantec Endpoint Protection</SourceImage>				<!-- Symantec -->
+				<GrantedAccess>0x1000</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION Generic call, quite noisy and tells not much-->
+				<GrantedAccess>0x1400</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION + PROCESS_QUERY_INFORMATION Generic call, quite noisy and tells nothing-->
+				<GrantedAccess>0x101400</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION + PROCESS_QUERY_INFORMATION + SYNCHRONIZE Generic call, quite noisy and tells nothing-->
+				<GrantedAccess>0x101000</GrantedAccess>				<!-- PROCESS_QUERY_LIMITED_INFORMATION + SYNCHRONIZE Generic call, quite noisy and tells nothing-->
 			</ProcessAccess>
 		</RuleGroup>
 
@@ -519,6 +638,7 @@
 				<TargetFilename condition="begin with">C:\Windows\AppPatch\Custom</TargetFilename>				<!--Windows: Application compatibility shims [ https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html ] -->
 				<TargetFilename condition="contains">VirtualStore</TargetFilename>				<!--Windows: UAC virtualization [ https://blogs.msdn.microsoft.com/oldnewthing/20150902-00/?p=91681 ] -->
 				<!--Exploitable file names-->
+				<TargetFilename condition="end with">.ocx</TargetFilename>				<!--Anyone using ActiveX? LOL-->
 				<TargetFilename condition="end with">.xls</TargetFilename>				<!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.ppt</TargetFilename>				<!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.rtf</TargetFilename>				<!--RTF files often 0day malware vectors when opened by Office-->
@@ -542,6 +662,15 @@
 				<!--SECTION: Windows:Updates-->
 				<TargetFilename condition="begin with">C:\$WINDOWS.~BT\Sources\</TargetFilename>				<!-- Windows: Feature updates containing lots of .exe and .sys-->
 				<Image condition="begin with">C:\Windows\winsxs\amd64_microsoft-windows</Image>				<!-- Windows: Windows update-->
+				<!--SECTION: Node4 Custom-->
+
+				<Image condition="end with">Microsoft\Teams\Update.exe</Image>				<!-- Teams update creates lots of files - M Rothe -->
+				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\winagent.exe</Image>				<!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
+				<Image condition="is">C:\Program Files (x86)\Advanced Monitoring Agent\patchman\ThirdPartyPatch\ThirdPartyPatch.exe</Image>				<!-- Solarwinds MSP Agent creates lots of files - M Rothe -->
+				<Image condition="is">	C:\Program Files\ESET\ESET Security\ekrn.exe</Image>				<!-- ESET creates lots of files - M Rothe -->
+				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.YourPhone_</TargetFilename>				<!-- lots of files created here - M Rothe -->
+				<TargetFilename condition="begin with">C:\Program Files\WindowsApps\Microsoft.CompanyPortal_</TargetFilename>				<!-- lots of files created here - M Rothe -->
+				<TargetFilename condition="begin with">	C:\PROGRA~2\ADVANC~1\downloads\update</TargetFilename>				<!-- Solarwind MSP dumps lots of files here - M Rothe -->
 			</FileCreate>
 		</RuleGroup>
 
@@ -640,6 +769,8 @@
 				<TargetObject name="T1101" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Lsa\</TargetObject>				<!-- [ https://attack.mitre.org/wiki/Technique/T1131 ] [ https://attack.mitre.org/wiki/Technique/T1101 ] -->
 				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\</TargetObject>				<!--Windows: Changes to WDigest-UseLogonCredential for password scraping [ https://www.trustedsec.com/april-2015/dumping-wdigest-creds-with-meterpreter-mimikatzkiwi-in-windows-8-1/ ] -->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Netsh</TargetObject>				<!--Windows: Netsh helper DLL [ https://attack.mitre.org/wiki/Technique/T1128 ] -->
+				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SecurityProviders</TargetObject>				<!--Windows: Changes to WDigest-UseLogonCredential for password scraping [ https://www.trustedsec.com/april-2015/dumping-wdigest-creds-with-meterpreter-mimikatzkiwi-in-windows-8-1/ ] -->
+				<TargetObject condition="contains">Software\Microsoft\Windows\CurrentVersion\Internet Settings\ProxyEnable</TargetObject>				<!--Windows: Malware often disables a web proxy for 2nd stage downloads -->
 				<!--Networking-->
 				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\NetworkProvider\Order\</TargetObject>				<!--Windows: Order of network providers that are checked to connect to destination [ https://www.malwarearchaeology.com/cheat-sheets ] -->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles</TargetObject>				<!--Windows: | Credit @ion-storm -->
@@ -689,6 +820,8 @@
 				<TargetObject name="T1138,AppCompatShim" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\InstalledSDB</TargetObject>				<!--Windows: AppCompat [ https://attack.mitre.org/wiki/Technique/T1138 ] -->
 				<TargetObject condition="contains">VirtualStore</TargetObject>				<!--Windows: Registry virtualization, something's wrong if it's in use [ https://msdn.microsoft.com/en-us/library/windows/desktop/aa965884(v=vs.85).aspx ] -->
 				<!--Windows internals integrity monitoring-->
+				<TargetObject name="Context,DeviceConnectedOrUpdated" condition="end with">\FriendlyName</TargetObject>				<!--Windows: New devices connected and remembered-->
+				<TargetObject name="Context,ProcessAccessedPrivateResource" condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\</TargetObject>				<!-- Windows: Win10 tracks when and what process uses webcam/microphone/location etc [ https://medium.com/@7a616368/can-you-track-processes-accessing-the-camera-and-microphone-7e6885b37072 ] -->
 				<TargetObject name="T1183,IFEO" condition="begin with">HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\</TargetObject>				<!--Windows: Malware likes changing IFEO, like adding Debugger to disable antivirus EXE-->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\</TargetObject>				<!--Windows: Event log system integrity and ACLs-->
 				<TargetObject name="Tamper-Safemode" condition="begin with">HKLM\SYSTEM\CurrentControlSet\Control\Safeboot\</TargetObject>				<!--Windows: Services approved to load in safe mode. Almost nothing should ever modify this.-->
@@ -715,6 +848,7 @@
 				<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\InstalledSDB</TargetObject>				<!-- Custom SHIM:FireEye FIN7 report - https://www.fireeye.com/blog/threat-research/2017/05/fin7-shim-databases-persistence.html -->
 				<TargetObject condition="begin with">HKLM\SYSTEM\CurrentControlSet\services\DNS\Parameters\</TargetObject>				<!--Microsoft:Windows:DNS: ServerLevelPluginDll Issue https://medium.com/@esnesenon/feature-not-bug-dnsadmin-to-dc-compromise-in-one-line-a0f779b8dc83 -->
 				<!--Suspicious sources-->
+				<Image name="Suspicious" condition="end with">regedit.exe</Image>				<!--Users and helpdesk staff making system modifications -->
 				<Image name="Suspicious,ImageBeginWithBackslash" condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
 			</RegistryEvent>
 		</RuleGroup>
@@ -797,24 +931,29 @@
 		<!--NOTE: Other filesystem minifilters can make it appear to Sysmon that some files are being written twice. This is not a Sysmon issue, per Mark Russinovich.-->
 
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, Image, TargetFilename, CreationUtcTime, Hash-->
-		<FileCreateStreamHash onmatch="include">
-			<TargetFilename condition="contains">Downloads</TargetFilename>			<!--Downloaded files. Does not include "Run" files in IE-->
-			<TargetFilename condition="contains">Temp\7z</TargetFilename>			<!--7zip extractions-->
-			<TargetFilename condition="contains">Startup</TargetFilename>			<!--ADS startup | Example: [ https://www.hybrid-analysis.com/sample/a314f6106633fba4b70f9d6ddbee452e8f8f44a72117749c21243dc93c7ed3ac?environmentId=100 ] -->
-			<TargetFilename condition="end with">.bat</TargetFilename>			<!--Batch scripting-->
-			<TargetFilename condition="end with">.cmd</TargetFilename>			<!--Batch scripting | Credit @ion-storm -->
-			<TargetFilename condition="end with">.doc</TargetFilename>			<!--Office doc potentially with macro -->
-			<TargetFilename condition="end with">.hta</TargetFilename>			<!--Scripting-->
-			<TargetFilename condition="end with">.lnk</TargetFilename>			<!--Shortcut file | Credit @ion-storm -->
-			<TargetFilename condition="end with">.ppt</TargetFilename>			<!--Office doc potentially with macros-->
-			<TargetFilename condition="end with">.ps1</TargetFilename>			<!--PowerShell-->
-			<TargetFilename condition="end with">.ps2</TargetFilename>			<!--PowerShell-->
-			<TargetFilename condition="end with">.reg</TargetFilename>			<!--Registry File-->
-			<TargetFilename condition="end with">.jse</TargetFilename>			<!--Registry File-->
-			<TargetFilename condition="end with">.vb</TargetFilename>			<!--VisualBasicScripting files-->
-			<TargetFilename condition="end with">.vbe</TargetFilename>			<!--VisualBasicScripting files-->
-			<TargetFilename condition="end with">.vbs</TargetFilename>			<!--VisualBasicScripting files-->
-		</FileCreateStreamHash>
+		<RuleGroup name="" groupRelation="or">
+			<FileCreateStreamHash onmatch="include">
+				<TargetFilename condition="contains">Downloads</TargetFilename>				<!--Downloaded files. Does not include "Run" files in IE-->
+				<TargetFilename condition="contains">Temp\7z</TargetFilename>				<!--7zip extractions-->
+				<TargetFilename condition="contains">Startup</TargetFilename>				<!--ADS startup | Example: [ https://www.hybrid-analysis.com/sample/a314f6106633fba4b70f9d6ddbee452e8f8f44a72117749c21243dc93c7ed3ac?environmentId=100 ] -->
+				<TargetFilename condition="end with">.bat</TargetFilename>				<!--Batch scripting-->
+				<TargetFilename condition="end with">.cmd</TargetFilename>				<!--Batch scripting | Credit @ion-storm -->
+				<TargetFilename condition="end with">.doc</TargetFilename>				<!--Office doc potentially with macro -->
+				<TargetFilename condition="end with">.hta</TargetFilename>				<!--Scripting-->
+				<TargetFilename condition="end with">.lnk</TargetFilename>				<!--Shortcut file | Credit @ion-storm -->
+				<TargetFilename condition="end with">.ppt</TargetFilename>				<!--Office doc potentially with macros-->
+				<TargetFilename condition="end with">.ps1</TargetFilename>				<!--PowerShell-->
+				<TargetFilename condition="end with">.ps2</TargetFilename>				<!--PowerShell-->
+				<TargetFilename condition="end with">.reg</TargetFilename>				<!--Registry File-->
+				<TargetFilename condition="end with">.jse</TargetFilename>				<!--Registry File-->
+				<TargetFilename condition="end with">.vb</TargetFilename>				<!--VisualBasicScripting files-->
+				<TargetFilename condition="end with">.vbe</TargetFilename>				<!--VisualBasicScripting files-->
+				<TargetFilename condition="end with">.vbs</TargetFilename>				<!--VisualBasicScripting files-->
+				<TargetFilename condition="end with">.exe</TargetFilename>				<!--Executables-->
+				<TargetFilename condition="end with">Temp\debug.bin</TargetFilename>				<!--Bin files https://github.com/GhostPack/SafetyKatz creates debug.bin in a temp folder-->
+				<TargetFilename condition="contains">Content.Outlook</TargetFilename>				<!--Microsoft:Outlook: Attachments-->
+			</FileCreateStreamHash>
+		</RuleGroup>
 
 		<RuleGroup name="" groupRelation="or">
 			<FileCreateStreamHash onmatch="exclude">
@@ -838,7 +977,11 @@
 		<!--DATA: UtcTime, ProcessGuid, ProcessId, PipeName, Image-->
 		<RuleGroup name="" groupRelation="or">
 			<PipeEvent onmatch="include">
-				<!--NOTE: Using incide with no rules means nothing in this section will be logged-->
+				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msf-pipe</PipeName>				<!-- default metasploit pipe name-->
+				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msagent_</PipeName>				<!-- default cobalt strike pipe name-->
+				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\PSEXESVC</PipeName>
+				<PipeName name="technique_id=T1049,technique_name=System Network Connections Discovery" condition="begin with">\srvsvc</PipeName>				<!--session enumeration-->
+				<PipeName name="technique_id=T1033,technique_name=System Owner/User Discovery" condition="begin with">\winreg</PipeName>				<!--also used in lateral movement-->
 			</PipeEvent>
 		</RuleGroup>
 
@@ -952,6 +1095,8 @@
 				<QueryName condition="is">clients5.google.com</QueryName>				<!--Google-->
 				<QueryName condition="is">clients6.google.com</QueryName>				<!--Google-->
 				<QueryName condition="is">safebrowsing.googleapis.com</QueryName>				<!--Google-->
+				<QueryName condition="end with">.adobe.com</QueryName>				<!--Adobe-->
+				<QueryName condition="end with">.adobe.io</QueryName>
 				<!--Goodlist CDN-->
 				<QueryName condition="end with">.akadns.net</QueryName>				<!--AkamaiCDN, extensively used by Microsoft | Microsoft default exclusion-->
 				<QueryName condition="end with">.netflix.com</QueryName>
@@ -963,6 +1108,8 @@
 				<QueryName condition="is">cdnjs.cloudflare.com</QueryName>
 				<QueryName condition="end with">.stackassets.com</QueryName>				<!--Stack Overflow-->
 				<QueryName condition="end with">.steamcontent.com</QueryName>
+				<QueryName condition="is">play.google.com</QueryName>
+				<QueryName condition="is">content-autofill.googleapis.com</QueryName>
 				<!--Web resources-->
 				<QueryName condition="end with">.disqus.com</QueryName>				<!--Microsoft default exclusion-->
 				<QueryName condition="end with">.fontawesome.com</QueryName>
@@ -1069,7 +1216,19 @@
 				<QueryName condition="end with">.digicert.com</QueryName>
 				<QueryName condition="end with">.globalsign.com</QueryName>
 				<QueryName condition="end with">.globalsign.net</QueryName>
+				<QueryName condition="end with">.intel.com</QueryName>
+				<QueryName condition="end with">.symcb.com</QueryName>				<!--Digicert-->
+				<QueryName condition="end with">.symcd.com</QueryName>				<!--Digicert-->
+				<QueryName condition="end with">.thawte.com</QueryName>
+				<QueryName condition="end with">.usertrust.com</QueryName>
+				<QueryName condition="end with">.verisign.com</QueryName>
+				<QueryName condition="end with">ocsp.identrust.com</QueryName>
+				<QueryName condition="end with">pki.goog</QueryName>
 				<QueryName condition="is">msocsp.com</QueryName>				<!--Microsoft:OCSP-->
+				<QueryName condition="is">ocsp.comodoca.com</QueryName>
+				<QueryName condition="is">ocsp.entrust.net</QueryName>
+				<QueryName condition="is">ocsp.godaddy.com</QueryName>
+				<QueryName condition="is">ocsp.int-x3.letsencrypt.org</QueryName>
 				<QueryName condition="is">ocsp.msocsp.com</QueryName>				<!--Microsoft:OCSP-->
 				<QueryName condition="end with">pki.goog</QueryName>
 				<QueryName condition="is">ocsp.godaddy.com</QueryName>
@@ -1084,6 +1243,21 @@
 				<QueryName condition="is">status.rapidssl.com</QueryName>
 				<QueryName condition="is">status.thawte.com</QueryName>
 				<QueryName condition="is">ocsp.int-x3.letsencrypt.org</QueryName>
+
+				<QueryName condition="end with">outlook.office.com</QueryName>
+				<QueryName condition="end with">n-able.com</QueryName>				<!-- Solarwinds MSP generates lots of DNS noise-->
+				<QueryName condition="end with">systemmonitor.co.uk</QueryName>				<!-- Solarwinds MSP generates lots of DNS noise-->
+				<QueryName condition="end with">wbx2.com</QueryName>				<!-- Webex generates lots of DNS noise-->
+				<QueryName condition="end with">webex.com</QueryName>				<!-- Webex generates lots of DNS noise-->
+				<QueryName condition="is">_ldap._tcp.N4CORP._sites.n4corp.node4.co.uk</QueryName>				<!-- ad joined machines generate noise-->
+				<QueryName condition="end with">eset.com</QueryName>
+				<QueryName condition="is">n4corp.node4.co.uk</QueryName>
+				<QueryName condition="is">spocs.getpocket.com</QueryName>
+				<QueryName condition="is">forticlient.fortinet.net</QueryName>
+				<QueryName condition="is">​autodiscover-s.outlook.com</QueryName>
+				<QueryName condition="is">​api.segment.io</QueryName>				<!-- noisy analytics domain-->
+				<QueryName condition="is">​	acdc-direct.office.com</QueryName>				<!-- MS Teams domain-->
+
 			</DnsQuery>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
@@ -1111,9 +1285,12 @@
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
 			<ClipboardChange onmatch="include">
+				<Image condition="end with">wscript.exe</Image>
+				<Image condition="end with">cscript.exe</Image>
+				<Image condition="end with">powershell.exe</Image>
+				<Image condition="end with">rdpclip.exe</Image>
 			</ClipboardChange>
 		</RuleGroup>
-
 		<!--SYSMON EVENT ID 255 : ERROR-->
 		<!--"This event is generated when an error occurred within Sysmon. They can happen if the system is under heavy load
 			and certain tasked could not be performed or a bug exists in the Sysmon service. You can report any bugs on the
