@@ -254,6 +254,9 @@
 				<Image condition="is">msiexec.exe</Image>				<!--Ignore setups-->
 				<Image condition="is">TrustedInstaller.exe</Image>				<!--Ignore setups-->
 				<TargetFilename condition="contains">\NVIDIA\NvBackend\ApplicationOntology\</TargetFilename>				<!--NVIDIA GeForce Experience Application Ontology, 1000's of events in user profile-->
+				<Image condition="end with">AppData\Roaming\Spotify\Spotify.exe\</Image>				<!--Spotify modifies time on temp files-->
+				<Image condition="end with">\AppData\Local\Microsoft\Teams\current\Teams.exe</Image>
+				<Image condition="end with">1Password.exe</Image>
 			</FileCreateTime>
 		</RuleGroup>
 
@@ -418,12 +421,17 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
-				<Image condition="is">ekrn.exe</Image>				<!-- ESET Binary-->
+								<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
+				<Image condition="contains">dsa.exe</Image> <!-- Trend Deep Security Binary-->
+				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
+				<Image condition="contains">coreServiceShell.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
+				<Image condition="contains">MsMpEng.exe</Image> <!-- MS Defender-->
 			</ProcessTerminate>
 		</RuleGroup>
 
 		<RuleGroup name="" groupRelation="or">
 			<ProcessTerminate onmatch="exclude">
+			<Image condition="contains">Teams.exe</Image> 
 			</ProcessTerminate>
 		</RuleGroup>
 
@@ -975,7 +983,7 @@
 				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msf-pipe</PipeName>				<!-- default metasploit pipe name-->
 				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msagent_</PipeName>				<!-- default cobalt strike pipe name-->
 				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\PSEXESVC</PipeName>
-				<PipeName name="technique_id=T1049,technique_name=System Network Connections Discovery" condition="begin with">\srvsvc</PipeName>				<!--session enumeration-->
+				<!-- Too noisy M Rothe <PipeName name="technique_id=T1049,technique_name=System Network Connections Discovery" condition="begin with">\srvsvc</PipeName>				<!--session enumeration--> -->
 				<PipeName name="technique_id=T1033,technique_name=System Owner/User Discovery" condition="begin with">\winreg</PipeName>				<!--also used in lateral movement-->
 			</PipeEvent>
 		</RuleGroup>
@@ -1262,6 +1270,7 @@
 				<Image condition="is">C:\Program Files\Mozilla Firefox\default-browser-agent.exe</Image>
 				<Image condition="is">C:\Program Files\Mozilla Firefox\pingsender.exe</Image>
 				<Image condition="is">C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</Image>
+				<Image condition="contains">\Microsoft SQL Server\MSSQL\</Image>
 				<Rule groupRelation="and">
 					<Image condition="begin with">C:\Program Files (x86)\Microsoft\Edge\Application\</Image>
 					<Image condition="end with">\BHO\ie_to_edge_stub.exe</Image>
@@ -1275,6 +1284,11 @@
 					<Image condition="contains">\MicrosoftEdge_X64_</Image>
 				</Rule>
 				<Image condition="is">C:\Program Files\Microsoft VS Code\Code.exe</Image>
+				<Image condition="end with">\AppData\Local\Microsoft\Teams\current\Teams.exe</Image>
+				<Image condition="is">C:\Program Files\Advanced Monitoring Agent Network Management\NetworkManagementAndControl.exe</Image>
+				<Image condition="is">C:\Program Files (x86)\Google\Chrome\Application\chrome.exe</Image>
+				<Image condition="is">C:\Program Files\Fortinet\FortiClient\FortiClient.exe</Image>
+
 			</ProcessTampering>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
