@@ -287,6 +287,7 @@
 				<Image condition="contains">\Windows\Fonts\</Image>
 				<Image condition="contains">\Windows\IME\</Image>
 				<Image condition="contains">\Windows\addins\</Image>
+				<Image condition="contains">\admin$\</Image>
 				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</Image>
 				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</Image>
 				<!--Suspicious Windows tools-->
@@ -297,6 +298,7 @@
 				<Image condition="image">cscript.exe</Image>				<!--WindowsScriptingHost: | Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 				<Image condition="image">driverquery.exe</Image>				<!--Windows: Remote recognisance of system configuration, oudated/vulnerable drivers -->
 				<Image condition="image">dsquery.exe</Image>				<!--Microsoft: Query Active Directory -->
+				<Image condition="image">gpupate.exe</Image>				<!--Often used by Cobalt Strike for injection/hollowing -->
 				<Image condition="image">hh.exe</Image>				<!--Windows: HTML Help Executable, opens CHM files -->
 				<Image condition="image">infDefaultInstall.exe</Image>				<!--Microsoft: [ https://github.com/huntresslabs/evading-autoruns ] | Credit @KyleHanslovan -->
 				<Image condition="image">java.exe</Image>				<!--Java: Monitor usage of vulnerable application and init from JAR files | Credit @ion-storm -->
@@ -323,8 +325,10 @@
 				<Image condition="image">rwinsta.exe</Image>				<!--Windows: Disconnect remote sessions | Credit @ion-storm -->
 				<Image condition="image">sc.exe</Image>				<!--Windows: Remotely change Windows service settings | Credit @ion-storm -->
 				<Image condition="image">schtasks.exe</Image>				<!--Windows: Command-line interface to local and remote tasks -->
+				<Image condition="image">searchprotocolhost.exe</Image>				<!--Often used by Cobalt Strike for injection/hollowing -->
 				<Image condition="image">taskkill.exe</Image>				<!--Windows: Kill processes, has remote ability -->
 				<Image condition="image">tasklist.exe</Image>				<!--Windows: List processes, has remote ability -->
+				<Image condition="image">werfault.exe</Image>				<!--Often used by Cobalt Strike for injection/hollowing -->
 				<Image condition="image">wmic.exe</Image>				<!--WindowsManagementInstrumentation: Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 				<Image condition="image">wscript.exe</Image>				<!--WindowsScriptingHost: | Credit @arekfurt -->
 				<Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexec.exe</Image>				<!--Sysinternals:PsExec client side | Credit @Cyb3rOps -->
@@ -645,6 +649,24 @@
 				<TargetFilename condition="end with">.xls</TargetFilename>				<!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.ppt</TargetFilename>				<!--Legacy Office files are often used for attacks-->
 				<TargetFilename condition="end with">.rtf</TargetFilename>				<!--RTF files often 0day malware vectors when opened by Office-->
+
+				<TargetFilename condition="contains">readme</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="contains">decrypt</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="contains">your_files</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="contains">encrypted</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="contains">recover_files</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				
+				<TargetFilename condition="end with">.micro</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.zepto</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.cerber</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.locky</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.onion</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.cryptolocker</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.cry</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+
+
+
+
 			</FileCreate>
 		</RuleGroup>
 
@@ -1307,3 +1329,4 @@
 
 	</EventFiltering>
 </Sysmon>
+

@@ -284,6 +284,7 @@
 				<Image condition="contains">\Windows\Fonts\</Image>
 				<Image condition="contains">\Windows\IME\</Image>
 				<Image condition="contains">\Windows\addins\</Image>
+				<Image condition="contains">\admin$\</Image>
 				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</Image>
 				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</Image>
 				<!--Suspicious Windows tools-->
@@ -294,6 +295,7 @@
 				<Image condition="image">cscript.exe</Image>				<!--WindowsScriptingHost: | Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 				<Image condition="image">driverquery.exe</Image>				<!--Windows: Remote recognisance of system configuration, oudated/vulnerable drivers -->
 				<Image condition="image">dsquery.exe</Image>				<!--Microsoft: Query Active Directory -->
+				<Image condition="image">gpupate.exe</Image>				<!--Often used by Cobalt Strike for injection/hollowing -->
 				<Image condition="image">hh.exe</Image>				<!--Windows: HTML Help Executable, opens CHM files -->
 				<Image condition="image">infDefaultInstall.exe</Image>				<!--Microsoft: [ https://github.com/huntresslabs/evading-autoruns ] | Credit @KyleHanslovan -->
 				<Image condition="image">java.exe</Image>				<!--Java: Monitor usage of vulnerable application and init from JAR files | Credit @ion-storm -->
@@ -320,8 +322,10 @@
 				<Image condition="image">rwinsta.exe</Image>				<!--Windows: Disconnect remote sessions | Credit @ion-storm -->
 				<Image condition="image">sc.exe</Image>				<!--Windows: Remotely change Windows service settings | Credit @ion-storm -->
 				<Image condition="image">schtasks.exe</Image>				<!--Windows: Command-line interface to local and remote tasks -->
+				<Image condition="image">werfault.exe</Image>				<!--Often used by Cobalt Strike for injection/hollowing -->
 				<Image condition="image">taskkill.exe</Image>				<!--Windows: Kill processes, has remote ability -->
 				<Image condition="image">tasklist.exe</Image>				<!--Windows: List processes, has remote ability -->
+				<Image condition="image">searchprotocolhost.exe</Image>				<!--Often used by Cobalt Strike for injection/hollowing -->
 				<Image condition="image">wmic.exe</Image>				<!--WindowsManagementInstrumentation: Credit @Cyb3rOps [ https://gist.github.com/Neo23x0/a4b4af9481e01e749409 ] -->
 				<Image condition="image">wscript.exe</Image>				<!--WindowsScriptingHost: | Credit @arekfurt -->
 				<Image name="technique_id=T1569.002,technique_name=Service Execution" condition="image">psexec.exe</Image>				<!--Sysinternals:PsExec client side | Credit @Cyb3rOps -->
@@ -399,7 +403,7 @@
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationPort condition="is">443</DestinationPort>				<!-- HTTPS is really noisy on endpoints - M Rothe-->
 				<Rule groupRelation="and">
-					<DestinationPort condition="is">53</DestinationPort>					<!-- HTTPS is really noisy on endpoints - M Rothe-->
+					<DestinationPort condition="is">53</DestinationPort>					<!-- DNS Connections is really noisy on endpoints - M Rothe-->
 					<Protocol condition="is">udp</Protocol>
 				</Rule>
 			</NetworkConnect>
