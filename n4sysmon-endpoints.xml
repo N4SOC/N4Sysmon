@@ -406,7 +406,7 @@
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationPort condition="is">443</DestinationPort>				<!-- HTTPS is really noisy on endpoints - M Rothe-->
 				<Rule groupRelation="and">
-					<DestinationPort condition="is">53</DestinationPort>					<!-- HTTPS is really noisy on endpoints - M Rothe-->
+					<DestinationPort condition="is">53</DestinationPort>					<!-- DNS Connections is noisy and pointless - M Rothe-->
 					<Protocol condition="is">udp</Protocol>
 				</Rule>
 			</NetworkConnect>
@@ -664,7 +664,12 @@
 				<TargetFilename condition="end with">.cryptolocker</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
 				<TargetFilename condition="end with">.cry</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
 
-
+				<TargetFilename condition="contains">\SAM-20</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="contains">\SAM-haxx</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="contains">\Sam.save</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="contains">\hive_sam_</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="is">C:\windows\temp\sam</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="begin with">C:\Windows\System32\spool\drivers\x64</TargetFilename> <!-- PrinterNight -->
 
 
 			</FileCreate>
@@ -1329,4 +1334,3 @@
 
 	</EventFiltering>
 </Sysmon>
-
