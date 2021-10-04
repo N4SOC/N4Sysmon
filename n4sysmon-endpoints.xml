@@ -409,6 +409,11 @@
 					<DestinationPort condition="is">53</DestinationPort>					<!-- DNS Connections is noisy and pointless - M Rothe-->
 					<Protocol condition="is">udp</Protocol>
 				</Rule>
+				<Rule groupRelation="and">										<!-- UDP RDP Connections are very noisy - M Rothe-->
+					<DestinationPort condition="is">3389</DestinationPort>					
+					<Protocol condition="is">udp</Protocol>
+					<Image condition="is">C:\Windows\System32\mstsc.exe</Image>
+				</Rule>
 			</NetworkConnect>
 		</RuleGroup>
 
