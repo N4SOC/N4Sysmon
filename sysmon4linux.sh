@@ -17,6 +17,7 @@ elif grep -i CentOS /etc/os-release>/dev/null; then
 else
     echo "OS Not supported"
     exit 1
+fi
 
 wget https://raw.githubusercontent.com/N4SOC/N4Sysmon/main/linux_sysmon.xml # Download node4 sysmon config
 
