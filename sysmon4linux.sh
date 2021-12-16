@@ -22,6 +22,11 @@ elif grep -i "Red Hat" /etc/os-release>/dev/null; then
     rpm -Uvh https://packages.microsoft.com/config/rhel/$(lsb_release -rs)/packages-microsoft-prod.rpm
     dnf install sysinternalsebpf
     dnf install sysmonforlinux
+elif grep -i "Fedora" /etc/os-release>/dev/null; then
+    echo "Running Fedora install commands"
+    rpm -Uvh https://packages.microsoft.com/config/fedora/$(lsb_release -rs)/packages-microsoft-prod.rpm
+    dnf install sysinternalsebpf
+    dnf install sysmonforlinux
 elif grep -i Arch /etc/os-release>/dev/null; then
     echo "Arch Linux Not supported"
     exit 1
