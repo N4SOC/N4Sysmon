@@ -62,12 +62,9 @@ NG FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 				</Rule>
       </NetworkConnect>
     </RuleGroup>
-    <!-- Event ID 5 == ProcessTerminate. Log all processes terminated except -->
+    <!-- Event ID 5 == ProcessTerminate. Log no terminated processes -->
     <RuleGroup name="" groupRelation="or">
-      <ProcessTerminate onmatch="exclude">
-        <Image condition="is">/sbin/xtables-multi</Image>
-        <Image condition="is">/usr/bin/clear</Image>
-        <Image condition="is">/lib/systemd/systemd-journald</Image>
+      <ProcessTerminate onmatch="include">
       </ProcessTerminate>
     </RuleGroup>
         <!-- Event ID 9 == RawAccessRead. Log all raw access read -->
