@@ -214,6 +214,11 @@
 					<Image condition="end with">MicrosoftEdgeUpdate.exe</Image>
 				</Rule>
 
+				<Rule groupRelation="and">
+					<ParentImage condition="end with">Program Files\Trend Micro\Deep Security Agent\dsa.exe</ParentImage>
+					<Image condition="contain">Program Files\VMWare\VMWare Tools\vmtoolsd.exe</Image>
+				</Rule>
+
 				<Image condition="is">C:\Windows\System32\msfeedssync.exe</Image>				<!--MS Feed sync-->
 				<Image condition="is">C:\Program Files (x86)\Fortinet\FortiClient\FCHelper64.exe</Image>				<!--Forticlient-->
 				<Image condition="end with">AppData\Local\Microsoft\Teams\current\Teams.exe</Image>				<!-- MS Teams -->
@@ -2107,6 +2112,9 @@
 				<QueryName condition="is">​autodiscover-s.outlook.com</QueryName>
 				<QueryName condition="is">​api.segment.io</QueryName>				<!-- noisy analytics domain-->
 				<QueryName condition="is">​	acdc-direct.office.com</QueryName>				<!-- MS Teams domain-->
+				<QueryName condition="is">​checks-api.emea.system-monitor.com</QueryName>
+				<QueryName condition="is">cannonball-eu-west-1-push.logicnow.us</QueryName>
+
 			</DnsQuery>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
