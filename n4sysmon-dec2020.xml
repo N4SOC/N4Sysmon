@@ -427,8 +427,8 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
-				<Image condition="contains">ekrn.exe</Image>				<!-- ESET Binary-->
-				<Image condition="contains">dsa.exe</Image>				<!-- Trend Deep Security Binary-->
+				<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
+				<Image condition="contains">dsa.exe</Image>		<!-- Trend Deep Security Binary-->
 				<Image condition="contains">coreFrameworkHost.exe</Image>				<!-- Trend Deep Security Anti-Malware  Binary-->
 				<Image condition="contains">coreServiceShell.exe</Image>				<!-- Trend Deep Security Anti-Malware  Binary-->
 				<Image condition="contains">MsMpEng.exe</Image>				<!-- MS Defender-->
@@ -1381,6 +1381,10 @@
 				<Image condition="is">C:\Program Files (x86)\Ivanti\Workspace Control\pfwsmgr.exe</Image>
 				<Image condition="is">C:\Program Files (x86)\RES Software\Workspace Manager\pfwsmgr.exe</Image>
 				<Rule groupRelation="and">
+					<Image condition="image">C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe</Image>
+					<TargetFilename condition="contains">C:\Program Files\Microsoft Monitoring Agent\Agent\Health Service State\Monitoring Host Temporary Files</TargetFilename>
+				</Rule>
+				<Rule groupRelation="and">
 					<Image condition="image">Outlook.exe</Image>
 					<TargetFilename condition="contains">Roaming\Microsoft\Outlook\Outlook.xml</TargetFilename>
 				</Rule>
@@ -1636,7 +1640,12 @@
 				<TargetObject condition="begin with">HKCR\VLC.</TargetObject>				<!--VLC update noise-->
 				<TargetObject condition="begin with">HKCR\iTunes.</TargetObject>				<!--Apple: iTunes update noise-->
 				<!--WINEVT publishers noise-->
-				<TargetObject condition="is">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{945a8954-c147-4acd-923f-40c45405a658}</TargetObject>				<!--Windows update-->
+				<TargetObject condition="is">HKLM\Software\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\{945a8954-c147-4acd-923f-40c45405a658}</TargetObject>			
+				<Rule groupRelation="and">
+					<Image condition="image">C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe</Image>
+					<TargetObject condition="contains">Machine\SOFTWARE\Policies\Microsoft\Windows Defender\DisableAntiSpyware</TargetObject>
+				</Rule>
+	<!--Windows update-->
 			</RegistryEvent>
 		</RuleGroup>
 
