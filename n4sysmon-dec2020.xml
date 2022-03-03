@@ -197,8 +197,8 @@
 				<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine>				<!--Google:Chrome: massive command-line arguments-->
 				<Image condition="is">C:\Program Files (x86)\Google\Update\GoogleUpdate.exe</Image>
 				<Rule groupRelation="and">					<!-- https://github.com/olafhartong/sysmon-modular/issues/26 -->
-					<ParentImage condition="is">C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe</ParentImage>
-					<CommandLine condition="contains">cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>					<!--Microsoft Sentinel SIEM agent, based on MOM-->
+					<ParentImage condition="contains">MonitoringHost.exe</ParentImage>
+					<CommandLine condition="contains">MonitorKnowledgeDiscovery.vbs</CommandLine>					<!--Microsoft Sentinel SIEM agent, based on MOM-->
 				</Rule>
 				<!--MS Edge-->
 				<Rule groupRelation="and">

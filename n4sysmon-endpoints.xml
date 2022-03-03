@@ -197,8 +197,8 @@
 				<CommandLine condition="begin with">"C:\Program Files\Google\Chrome\Application\chrome.exe" --type=</CommandLine>				<!--Google:Chrome: massive command-line arguments-->
 				<Image condition="is">C:\Program Files (x86)\Google\Update\GoogleUpdate.exe</Image>
 				<Rule groupRelation="and">					<!-- https://github.com/olafhartong/sysmon-modular/issues/26 -->
-					<ParentCommandLine condition="is">"C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe" -Embedding</ParentCommandLine>
-					<CommandLine condition="is">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>					<!--Microsoft Sentinel SIEM agent, based on MOM-->
+					<ParentImage condition="contains">MonitoringHost.exe</ParentImage>
+					<CommandLine condition="contains">MonitorKnowledgeDiscovery.vbs</CommandLine>					<!--Microsoft Sentinel SIEM agent, based on MOM-->
 				</Rule>
 				<!--MS Edge-->
 				<Rule groupRelation="and">
@@ -222,9 +222,6 @@
 				<Image condition="is">C:\Windows\servicing\TrustedInstaller.exe</Image>				<!--Windows installer process-->
 				<Image condition="is">C:\Windows\System32\mousocoreworker.exe </Image>				<!--Windows update process-->
 				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine>				<!--GFI Managed AV-->
-				<CommandLine condition="contains">C:\Windows\system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine>				<!-- Microsoft Monitoring Agent-->
-
-
 			</ProcessCreate>
 		</RuleGroup>
 
@@ -430,7 +427,7 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
-								<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
+				<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
 				<Image condition="contains">dsa.exe</Image> <!-- Trend Deep Security Binary-->
 				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
 				<Image condition="contains">coreServiceShell.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
@@ -440,7 +437,7 @@
 
 		<RuleGroup name="" groupRelation="or">
 			<ProcessTerminate onmatch="exclude">
-			<Image condition="contains">Teams.exe</Image> 
+				<Image condition="contains">Teams.exe</Image>
 			</ProcessTerminate>
 		</RuleGroup>
 
