@@ -407,7 +407,12 @@
 				<!--OCSP known addresses-->
 				<DestinationIp condition="is">23.4.43.27</DestinationIp>				<!--Digicert [ https://otx.alienvault.com/indicator/ip/23.4.43.27 ] -->
 				<DestinationIp condition="is">72.21.91.29</DestinationIp>
-
+				<!--Section: K3 SMTP Exclusions-->
+				<Rule groupRelation="and">
+					<DestinationIp condition="is">10.8.12.4</DestinationIp>
+					<DestinationPort condition="is">25</DestinationPort>
+					<Image condition="is">C:\Windows\System32\inetsrv\inetinfo.exe</Image>
+				</Rule>
 				<!--Section: Loopback Addresses-->
 				<DestinationIp condition="is">127.0.0.1</DestinationIp>				<!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp>				<!--Credit @ITProPaul-->
