@@ -166,7 +166,8 @@
 				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs</ParentCommandLine>				<!--Windows: Network services: Spawns Consent.exe-->
 				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</ParentCommandLine>				<!--Windows-->
 				<CommandLine condition="is">C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM</CommandLine>				<!--Windows: AzureAD device enrollment agent-->
-
+				<!--SECTION: K3 Octopus Manager Exclusions-->
+				<Image condition="is">D:\Program Files\Octopus Deploy\Tentacle\Octopus.Manager.Tentacle.exe</Image>
 				<!--SECTION: Microsoft:dotNet-->
 				<CommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe</CommandLine>				<!--Microsoft:DotNet-->
 				<CommandLine condition="begin with">C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Ngen.exe</CommandLine>				<!--Microsoft:DotNet-->
