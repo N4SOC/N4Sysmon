@@ -1601,6 +1601,8 @@
 				<TargetObject condition="begin with">HKLM\COMPONENTS</TargetObject>
 				<!--Inventory noise-->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\AppModel\StateRepository\Cache</TargetObject>
+				<!--SECTION: K3 WebRoot-->
+				<Image condition="is">C:\Program Files (x86)\Webroot\WRSA.exe</Image>
 				<!--Misc-->
 				<TargetObject condition="end with">Toolbar\WebBrowser</TargetObject>				<!--Microsoft:IE: Extraneous activity-->
 				<TargetObject condition="end with">Browser\ITBar7Height</TargetObject>				<!--Microsoft:IE: Extraneous activity, covers ShellBrowser and WebBrowser-->
