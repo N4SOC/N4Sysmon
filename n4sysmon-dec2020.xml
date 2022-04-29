@@ -156,20 +156,21 @@
 				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k networkServiceNetworkRestricted</CommandLine> <!--Windows: Network services-->
 				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k rPCSS</CommandLine> <!--Windows Services-->
 				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k secsvcs</CommandLine>
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k swprv</CommandLine> <!--Microsoft:Software Shadow Copy Provider-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k unistackSvcGroup</CommandLine> <!--Windows 10-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k utcsvc</CommandLine> <!--Windows Services-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wbioSvcGroup</CommandLine> <!--Windows Services-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k werSvcGroup</CommandLine> <!--Windows: ErrorReporting-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wusvcs -p -s WaaSMedicSvc</CommandLine> <!--Windows: Update Medic Service [ https://www.thewindowsclub.com/windows-update-medic-service ] -->
-				<CommandLine condition="is">C:\Windows\System32\svchost.exe -k wsappx -p -s ClipSVC</CommandLine> <!--Windows:Apps: Client License Service-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx -p -s AppXSvc</CommandLine> <!--Windows:Apps: AppX Deployment Service-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx -s ClipSVC</CommandLine> <!--Windows:Apps: Client License Service-->
-				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx</CommandLine> <!--Windows:Apps [ https://www.howtogeek.com/320261/what-is-wsappx-and-why-is-it-running-on-my-pc/ ] -->
-				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs</ParentCommandLine> <!--Windows: Network services: Spawns Consent.exe-->
-				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</ParentCommandLine> <!--Windows-->
-				<CommandLine condition="is">C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM</CommandLine> <!--Windows: AzureAD device enrollment agent-->
-
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k swprv</CommandLine>				<!--Microsoft:Software Shadow Copy Provider-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k unistackSvcGroup</CommandLine>				<!--Windows 10-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k utcsvc</CommandLine>				<!--Windows Services-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wbioSvcGroup</CommandLine>				<!--Windows Services-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k werSvcGroup</CommandLine>				<!--Windows: ErrorReporting-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wusvcs -p -s WaaSMedicSvc</CommandLine>				<!--Windows: Update Medic Service [ https://www.thewindowsclub.com/windows-update-medic-service ] -->
+				<CommandLine condition="is">C:\Windows\System32\svchost.exe -k wsappx -p -s ClipSVC</CommandLine>				<!--Windows:Apps: Client License Service-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx -p -s AppXSvc</CommandLine>				<!--Windows:Apps: AppX Deployment Service-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx -s ClipSVC</CommandLine>				<!--Windows:Apps: Client License Service-->
+				<CommandLine condition="is">C:\Windows\system32\svchost.exe -k wsappx</CommandLine>				<!--Windows:Apps [ https://www.howtogeek.com/320261/what-is-wsappx-and-why-is-it-running-on-my-pc/ ] -->
+				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k netsvcs</ParentCommandLine>				<!--Windows: Network services: Spawns Consent.exe-->
+				<ParentCommandLine condition="is">C:\Windows\system32\svchost.exe -k localSystemNetworkRestricted</ParentCommandLine>				<!--Windows-->
+				<CommandLine condition="is">C:\Windows\system32\deviceenroller.exe /c /AutoEnrollMDM</CommandLine>				<!--Windows: AzureAD device enrollment agent-->
+				<!--SECTION: K3 Octopus Manager Exclusions-->
+				<Image condition="is">D:\Program Files\Octopus Deploy\Tentacle\Octopus.Manager.Tentacle.exe</Image>
 				<!--SECTION: Microsoft:dotNet-->
 				<CommandLine condition="begin with">C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe</CommandLine> <!--Microsoft:DotNet-->
 				<CommandLine condition="begin with">C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\Ngen.exe</CommandLine> <!--Microsoft:DotNet-->
@@ -411,7 +412,12 @@
 				<!--OCSP known addresses-->
 				<DestinationIp condition="is">23.4.43.27</DestinationIp> <!--Digicert [ https://otx.alienvault.com/indicator/ip/23.4.43.27 ] -->
 				<DestinationIp condition="is">72.21.91.29</DestinationIp>
-
+				<!--Section: K3 SMTP Exclusions-->
+				<Rule groupRelation="and">
+					<DestinationIp condition="is">10.8.12.4</DestinationIp>
+					<DestinationPort condition="is">25</DestinationPort>
+					<Image condition="is">C:\Windows\System32\inetsrv\inetinfo.exe</Image>
+				</Rule>
 				<!--Section: Loopback Addresses-->
 				<DestinationIp condition="is">127.0.0.1</DestinationIp> <!--Credit @ITProPaul-->
 				<DestinationIp condition="begin with">fe80:0:0:0</DestinationIp> <!--Credit @ITProPaul-->
@@ -1607,6 +1613,8 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetObject condition="begin with">HKLM\COMPONENTS</TargetObject>
 				<!--Inventory noise-->
 				<TargetObject condition="begin with">HKLM\Software\Microsoft\Windows\CurrentVersion\AppModel\StateRepository\Cache</TargetObject>
+				<!--SECTION: K3 WebRoot-->
+				<Image condition="is">C:\Program Files (x86)\Webroot\WRSA.exe</Image>
 				<!--Misc-->
 				<TargetObject condition="end with">Toolbar\WebBrowser</TargetObject> <!--Microsoft:IE: Extraneous activity-->
 				<TargetObject condition="end with">Browser\ITBar7Height</TargetObject> <!--Microsoft:IE: Extraneous activity, covers ShellBrowser and WebBrowser-->
