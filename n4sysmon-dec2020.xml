@@ -1675,6 +1675,12 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 					<Image condition="image">C:\Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe</Image>
 					<TargetObject condition="contains">Machine\SOFTWARE\Policies\Microsoft\Windows Defender\DisableAntiSpyware</TargetObject>
 				</Rule>
+				<Rule groupRelation="and"> <!-- This gets smashed during Veeam backups -->
+					<Image condition="image">C:\Windows\system32\svchost.exe</Image>
+					<TargetObject condition="contains">S-1-5-21-1875665505-901557284-3974649828-500\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts</TargetObject>
+				</Rule>
+
+				
 				<!--Windows update-->
 			</RegistryEvent>
 		</RuleGroup>
