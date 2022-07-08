@@ -238,8 +238,7 @@
 				<Image condition="is">C:\Windows\System32\mousocoreworker.exe </Image> <!--Windows update process-->
 				<CommandLine condition="contains">C:\Program Files\Managed Antivirus\Managed Antivirus Engine\Managed Antivirus\Managed Antivirus\epagps.dll</CommandLine> <!--GFI Managed AV-->
 				<CommandLine condition="contains">system32\cscript.exe" /nologo "MonitorKnowledgeDiscovery.vbs</CommandLine> <!-- Microsoft Monitoring Agent-->
-
-
+				<ParentImage condition="is">C:\ProgramData\CentraStage\AEMAgent\AEMAgent.exe</ParentImage> <!-- Datto Agent-->
 			</ProcessCreate>
 		</RuleGroup>
 
@@ -1600,6 +1599,9 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Ports</TargetObject> <!--Microsoft:Windows: Printer port changes as used in CVE-2020-1048 [ https://windows-internals.com/printdemon-cve-2020-1048/ ] -->
 				<TargetObject condition="contains">\Keyboard Layout\Preload</TargetObject> <!--Microsoft:Windows: Keyboard layout loaded into user session [ https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Keyboard-Layout/Preload/index ] -->
 				<TargetObject condition="contains">\Keyboard Layout\Substitutes</TargetObject> <!--Microsoft:Windows: Keyboard layout loaded into user session [ https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Keyboard-Layout/Preload/index ] -->
+
+				<TargetObject condition="contains">\classes\ms-settings\shell\open\command</TargetObject> <!-- M Rothe - Written when fodhelper is used for priv-esc [https://pentestlab.blog/2017/06/07/uac-bypass-fodhelper/] -->
+
 			</RegistryEvent>
 		</RuleGroup>
 
