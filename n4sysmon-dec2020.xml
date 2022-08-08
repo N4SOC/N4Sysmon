@@ -1897,6 +1897,11 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<PipeName condition="is">\spoolss</PipeName>
 				<PipeName condition="contains">Anonymous Pipe</PipeName>
 				<Image condition="is">c:\windows\system32\inetsrv\w3wp.exe</Image>
+				<Image condition="end with">Program Files\Microsoft Monitoring Agent\Agent\MonitoringHost.exe</Image>
+				<Image condition="end with">Program Files\Microsoft Monitoring Agent\Agent\MOMPerfSnapshotHelper.exe</Image>
+				<Image condition="end with">\Program Files\On-premises data gateway\m\Microsoft.Mashup.Container.NetFX45.exe</Image>
+
+
 			</PipeEvent>
 		</RuleGroup>
 		<!--SYSMON EVENT ID 19 & 20 & 21 : WMI EVENT MONITORING [WmiEvent]-->
