@@ -264,7 +264,7 @@
 				<Image condition="contains">setup</Image> <!--Ignore setups-->
 				<Image condition="contains">install</Image> <!--Ignore setups-->
 				<Image condition="contains">Update\</Image> <!--Ignore setups-->
-				<Image condition="end with">redist.exe</Image> <!--Ignore setups-->
+				<Image condition="end with">\redist.exe</Image> <!--Ignore setups-->
 				<Image condition="is">msiexec.exe</Image> <!--Ignore setups-->
 				<Image condition="is">TrustedInstaller.exe</Image> <!--Ignore setups-->
 				<TargetFilename condition="contains">\NVIDIA\NvBackend\ApplicationOntology\</TargetFilename> <!--NVIDIA GeForce Experience Application Ontology, 1000's of events in user profile-->
@@ -359,9 +359,14 @@
 				<Image condition="image">Winword.exe</Image> <!-- Windows Office: Word - Can download from URLs -->
 				<Image condition="image">squirrel.exe</Image> <!-- Windows: Update the Nuget/Squirrel packages. Part of Teams. - Can download from URLs -->
 				<!--Relevant 3rd Party Tools-->
+				<Image condition="image">netcat.exe</Image> <!-- Compiled netcat.c file if naming convention is kept https://github.com/DarrenRainey/netcat -->
 				<Image condition="image">nc.exe</Image> <!-- Nmap's modern version of netcat [ https://nmap.org/ncat/guide/index.html#ncat-overview ] [ https://securityblog.gr/1517/create-backdoor-in-windows-with-ncat/ ] -->
+				<Image condition="image">nc64.exe</Image> <!-- Nmap's modern version of netcat [ https://nmap.org/ncat/guide/index.html#ncat-overview ] [ https://securityblog.gr/1517/create-backdoor-in-windows-with-ncat/ ] -->
 				<Image condition="image">ncat.exe</Image> <!-- Nmap's modern version of netcat [ https://nmap.org/ncat/guide/index.html#ncat-overview ] [ https://securityblog.gr/1517/create-backdoor-in-windows-with-ncat/ ] -->
+				<Image condition="image">procdump.exe</Image> <!-- Sysinternals Suite client side that can be used to dump clear text passwords from memory -->
+			<Image condition="image">procdump64.exe</Image> <!-- Sysinternals Suite client side 64-bit version that can be used to dump clear text passwords from memory -->
 				<Image condition="image">psexec.exe</Image> <!--Sysinternals:PsExec client side | Credit @Cyb3rOps -->
+				<Image condition="image">psexec64.exe</Image> <!-- Sysinernals:PsExec64 client side | 64-bit version of psexec.exe -->
 				<Image condition="image">psexesvc.exe</Image> <!--Sysinternals:PsExec server side | Credit @Cyb3rOps -->
 				<Image condition="image">tor.exe</Image> <!--Tor [ https://www.hybrid-analysis.com/sample/800bf028a23440134fc834efc5c1e02cc70f05b2e800bbc285d7c92a4b126b1c?environmentId=100 ] -->
 				<Image condition="image">vnc.exe</Image> <!-- VNC client | Credit @Cyb3rOps -->
@@ -379,7 +384,9 @@
 				<DestinationPort name="RDP" condition="is">3389</DestinationPort> <!--Windows:RDP: Monitor admin connections-->
 				<DestinationPort name="VNC" condition="is">5800</DestinationPort> <!--VNC protocol: Monitor admin connections, often insecure, using hard-coded admin password-->
 				<DestinationPort name="VNC" condition="is">5900</DestinationPort> <!--VNC protocol Monitor admin connections, often insecure, using hard-coded admin password-->
-				<DestinationPort name="Alert,Metasploit" condition="is">444</DestinationPort>
+				<DestinationPort name="Alert,Metasploit" condition="is">444</DestinationPort>\
+				<DestinationPort name="WinRM" condition="is">5985</DestinationPort> <!-- WinRM protocol used for remote connections to execute commands -->
+				<DestinationPort name="WinRM over HTTPS" condition="is">5986</DestinationPort> <!-- WinRM over HTTPS when set up in an environment can be used for remote connections to execute commands -->
 				<!--Ports: Proxy-->
 				<DestinationPort name="Proxy" condition="is">1080</DestinationPort> <!--Socks proxy port | Credit @ion-storm-->
 				<DestinationPort name="Proxy" condition="is">3128</DestinationPort> <!--Socks proxy port | Credit @ion-storm-->
@@ -431,6 +438,13 @@
 					<Protocol condition="is">udp</Protocol>
 					<Image condition="is">C:\Windows\System32\mstsc.exe</Image>
 				</Rule>
+				<!-- OneDrive -->
+			<Image condition="end with">\AppData\Local\Microsoft\OneDrive\OneDrive.exe</Image> <!--Microsoft: OneDrive-->
+			<!-- SECTION: Azure OMS/MMA Agent -->
+			<Image condition="begin with">C:\Program Files\Microsoft Monitoring Agent\</Image>
+			<Image condition="begin with">C:\Program Files\OMS Gateway\</Image>
+			<!-- SECTION: PRTG -->
+			<Image condition="is">C:\Program Files (x86)\PRTG Network Monitor\PRTG Probe.exe</Image>
 			</NetworkConnect>
 		</RuleGroup>
 
@@ -723,6 +737,9 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 		<!--DATA: UtcTime, SourceProcessGuid, SourceProcessId, SourceThreadId, SourceImage, TargetProcessGuid, TargetProcessId, TargetImage, GrantedAccess, CallTrace-->
 		<RuleGroup name="" groupRelation="or">
 			<ProcessAccess onmatch="include">
+			<!-- CobaltStrike BOF using OpenProcess/NtOpenProcess Ref: https://medium.com/falconforce/falconfriday-direct-system-calls-and-cobalt-strike-bofs-0xff14-741fa8e1bdd6 -->
+				<CallTrace condition="begin with">UNKNOWN</CallTrace>
+				<!-- Typical ProcessAccess Pattern of CobaltStrike BOF Ref: e.g. https://github.com/boku7/injectAmsiBypass -->
 				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\PerfLogs\</SourceImage>
 				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\$Recycle.bin\</SourceImage>
 				<SourceImage name="technique_id=T1036,technique_name=Masquerading" condition="begin with">C:\Intel\Logs\</SourceImage>
@@ -757,6 +774,21 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage> <!--Mitre T1098--> <!--Mitre T1550.002--> <!--Mitre T1003--> <!-- depending on what you're running on your host, this might be noisy-->
 					<GrantedAccess>0x1F1FFF</GrantedAccess>
 				</Rule>
+							<Rule groupRelation="and">
+				<CallTrace condition="contains">UNKNOWN</CallTrace>
+				<GrantedAccess condition="contains any">0x1028;0x1fffff</GrantedAccess>
+			</Rule>
+			<!-- lsass.exe access with critical permission -->
+			<Rule groupRelation="and">
+				<TargetImage condition="end with">\lsass.exe</TargetImage>
+				<GrantedAccess condition="contains any">0x40;0x1000;0x1010;0x1038;0x1410;0x1418;0x1438;0x143a;0x100000;0x1f0fff;0x1f1fff;0x1f2fff;0x1f3fff;0x1fffff</GrantedAccess> <!--0x1400 too noisy-->
+			</Rule>
+			<!-- LittleCorporal generated MalDoc Ref: https://github.com/connormcgarr/LittleCorporal -->
+			<Rule groupRelation="and">
+				<SourceImage condition="contains">winword.exe</SourceImage>
+				<CallTrace condition="contains">:\Windows\Microsoft.NET\Framework64\v2.</CallTrace>
+				<CallTrace condition="contains">UNKNOWN</CallTrace>
+			</Rule>
 				<Rule groupRelation="and">
 					<TargetImage name="technique_id=T1003,technique_name=Credential Dumping" condition="is">C:\Windows\system32\lsass.exe</TargetImage> <!--Mitre T1098--> <!--Mitre T1550.002--> <!--Mitre T1003--> <!-- depending on what you're running on your host, this might be noisy-->
 					<GrantedAccess>0x1010</GrantedAccess>
@@ -886,16 +918,26 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetFilename condition="end with">.jnlp</TargetFilename> <!--Java applets-->
 				<TargetFilename condition="end with">.jse</TargetFilename> <!--Scripting [ Example: https://www.sophos.com/en-us/threat-center/threat-analyses/viruses-and-spyware/Mal~Phires-C/detailed-analysis.aspx ] -->
 				<TargetFilename condition="end with">.hta</TargetFilename> <!--Scripting-->
+				<TargetFilename condition="end with">.aspx</TargetFilename> <!--Scripting-->
+				<TargetFilename condition="end with">.asp</TargetFilename> <!--Scripting-->
 				<TargetFilename condition="end with">.job</TargetFilename> <!--Scheduled task-->
 				<TargetFilename condition="end with">.pptm</TargetFilename> <!--Microsoft:Office:Word: Macro-->
 				<TargetFilename condition="end with">.ps1</TargetFilename> <!--PowerShell [ More information: http://www.hexacorn.com/blog/2014/08/27/beyond-good-ol-run-key-part-16/ ] -->
+				<TargetFilename condition="end with">.sct</TargetFilename> <!--Scripting | Credit @bartblaze -->
 				<TargetFilename condition="end with">.sys</TargetFilename> <!--System driver files-->
 				<TargetFilename condition="end with">.scr</TargetFilename> <!--System driver files-->
 				<TargetFilename condition="end with">.vbe</TargetFilename> <!--VisualBasicScripting-->
 				<TargetFilename condition="end with">.vbs</TargetFilename> <!--VisualBasicScripting-->
+				<TargetFilename condition="end with">.wsc</TargetFilename> <!--Scripting | Credit @bartblaze -->
+				<TargetFilename condition="end with">.wsf</TargetFilename> <!--Scripting | Credit @bartblaze -->
 				<TargetFilename condition="end with">.xlsm</TargetFilename> <!--Microsoft:Office:Word: Macro-->
 				<TargetFilename condition="end with">proj</TargetFilename> <!--Microsoft:MSBuild:Script: More information: https://twitter.com/subTee/status/885919612969394177-->
 				<TargetFilename condition="end with">.sln</TargetFilename> <!--Microsoft:MSBuild:Script: More information: https://twitter.com/subTee/status/885919612969394177-->
+				<TargetFilename condition="end with">.ocx</TargetFilename> <!--Microsoft:ActiveX-->
+				<TargetFilename condition="end with">.kirbi</TargetFilename> <!--Mimikatz Kerberos Ticket Files-->
+				<TargetFilename condition="end with">proj</TargetFilename><!--Microsoft:MSBuild:Script: [ https://twitter.com/subTee/status/885919612969394177 ] -->
+				<TargetFilename condition="end with">.sln</TargetFilename><!--Microsoft:MSBuild:Script: [ https://twitter.com/subTee/status/885919612969394177 ] -->
+				<TargetFilename condition="end with">.xls</TargetFilename><!--Microsoft -->
 				<TargetFilename name="DefaultUserModified" condition="begin with">C:\Users\Default</TargetFilename> <!--Windows: Changes to default user profile-->
 				<TargetFilename condition="begin with">C:\Windows\system32\Drivers</TargetFilename> <!--Microsoft: Drivers dropped here-->
 				<TargetFilename condition="begin with">C:\Windows\SysWOW64\Drivers</TargetFilename> <!--Microsoft: Drivers dropped here-->
@@ -1375,7 +1417,10 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetFilename condition="contains">\hive_sam_</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
 				<TargetFilename condition="is">C:\windows\temp\sam</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
 				<TargetFilename condition="begin with">C:\Windows\System32\spool\drivers\x64</TargetFilename> <!-- PrinterNight -->
-
+				<Rule groupRelation="and"> <!-- CVE-2021-40444 https://twitter.com/RonnyTNL/status/1436334640617373699 -->
+					<Image condition="end with">\WINWORD.EXE</Image>
+					<TargetFilename condition="contains any">.cab;.inf</TargetFilename>
+				</Rule>
 			</FileCreate>
 		</RuleGroup>
 
@@ -1476,6 +1521,8 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetObject condition="end with">LastLoggedOnUser</TargetObject> <!--Windows: Changing last-logged in user-->
 				<TargetObject name="ModifyRemoteDesktopPort" condition="end with">RDP-tcp\PortNumber</TargetObject> <!--Windows: Changing RDP port to evade IDS-->
 				<TargetObject condition="end with">Services\PortProxy\v4tov4</TargetObject> <!--Windows: Changing RDP port to evade IDS-->
+				<TargetObject condition="contains">\Microsoft\Terminal Server Client\Default\MRU</TargetObject> <!-- MSTSC Connection History -->
+				<TargetObject condition="contains">\Microsoft\Terminal Server Client\Servers\</TargetObject> <!-- MST -->
 				<!--CLSID launch commands and Default File Association changes-->
 				<TargetObject name="T1042" condition="contains">\command\</TargetObject> <!--Windows: Sensitive sub-key under file associations and CLSID that map to launch command-->
 				<TargetObject name="T1122" condition="contains">\ddeexec\</TargetObject> <!--Windows: Sensitive sub-key under file associations and CLSID that map to launch command-->
@@ -1531,6 +1578,8 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetObject name="T1137" condition="contains">Office Test\</TargetObject> <!-- Microsoft:Office: Persistence method [ http://www.hexacorn.com/blog/2014/04/16/beyond-good-ol-run-key-part-10/ ] | Credit @Hexacorn -->
 				<TargetObject name="Context,ProtectedModeExitOrMacrosUsed" condition="contains">Security\Trusted Documents\TrustRecords</TargetObject> <!--Microsoft:Office: Monitor when "Enable editing" or "Enable macros" is used | Credit @OutflankNL | [ https://outflank.nl/blog/2018/01/16/hunting-for-evil-detect-macros-being-executed/ ] -->
 				<TargetObject name="Suspicious,ChangedURLOutlook" condition="contains all">\Software\Microsoft\Office\;\Outlook\WebView\;URL</TargetObject> <!-- The URL shouldn't be changed all that often and could enable persistance for hackers | @humpelpum [ https://speakerdeck.com/heirhabarov/hunting-for-persistence-via-microsoft-exchange-server-or-outlook?slide=70 ]-->
+				<TargetObject name="Context,ProtectedModeExitOrMacrosUsed" condition="contains">Security\Trusted Documents\TrustRecords</TargetObject> <!--Microsoft:Office: Monitor when "Enable editing" or "Enable macros" is used | Credit @OutflankNL | [ https://outflank.nl/blog/2018/01/16/hunting-for-evil-detect-macros-being-executed/ ] -->
+			<TargetObject name="Context,ContactedDomain" condition="end with">\EnableBHO</TargetObject> <!--Microsoft:Office: Contacted domains stored here 'HKEY_CURRENT_USER\<SID>\SOFTWARE\Microsoft\Office\16.0\Common\Internet\Server Cache\<domain>\EnableBHO' -->
 				<!--IE-->
 				<TargetObject name="T1176" condition="contains">Internet Explorer\Toolbar\</TargetObject> <!--Microsoft:InternetExplorer: Machine and user [ Example: https://www.exterminate-it.com/malpedia/remove-mywebsearch ] -->
 				<TargetObject name="T1176" condition="contains">Internet Explorer\Extensions\</TargetObject> <!--Microsoft:InternetExplorer: Machine and user [ Example: https://www.exterminate-it.com/malpedia/remove-mywebsearch ] -->
@@ -1583,6 +1632,14 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<TargetObject name="InvDB-DriverVer" condition="end with">\DriverVerVersion</TargetObject> <!-- [ https://df-stream.com/2015/02/leveraging-devicecontainers-key/ ] -->
 				<TargetObject name="InvDB-CompileTimeClaim" condition="end with">\LinkDate</TargetObject> <!-- Compile time of EXE, may not be reliable [ https://en.wikipedia.org/wiki/Link_time ] -->
 				<TargetObject name="InvDB" condition="contains">Compatibility Assistant\Store\</TargetObject> <!-- Inventory -->
+				<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Ports</TargetObject> <!--Microsoft:Windows: Printer port changes as used in CVE-2020-1048 [ https://windows-internals.com/printdemon-cve-2020-1048/ ] -->
+			<TargetObject condition="contains">\Keyboard Layout\Preload</TargetObject> <!--Microsoft:Windows: Keyboard layout loaded into user session [ https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Keyboard-Layout/Preload/index ] -->
+			<TargetObject condition="contains">\Keyboard Layout\Substitutes</TargetObject> <!--Microsoft:Windows: Keyboard layout loaded into user session [ https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Keyboard-Layout/Preload/index ] -->
+			<!--Suspicious sources-->
+			<Image name="Suspicious,ImageBeginWithBackslash" condition="end with">regedit.exe</Image> <!--Users and helpdesk staff making system modifications -->
+			<Image name="Suspicious,ImageBeginWithBackslash" condition="begin with">\</Image> <!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
+			<TargetObject condition="begin with">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\</TargetObject> <!--Microsoft:Windows:UAC: Detect malware changes to UAC prompt level-->
+			<TargetObject condition="begin with">HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\</TargetObject> <!--Microsoft:Defender: Detect changes to Defender administrative settings to monitor for disablement-->
 				<!--Windows trust architecture monitoring | Credit: @mattifestation-->
 				<!--ADDITIONAL REFERENCE: https://specterops.io/assets/resources/SpecterOps_Subverting_Trust_in_Windows.pdf-->
 				<TargetObject condition="contains">Microsoft\Cryptography\OID\</TargetObject> <!-- Important trust registry values to monitor -->
@@ -1725,6 +1782,7 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<Rule name="technique_id=T1089,technique_name=Drive-by Compromise" groupRelation="and">
 					<TargetFilename condition="end with">:Zone.Identifier</TargetFilename>
 					<Contents condition="contains any">blob:;about:internet</Contents>
+					<TargetFilename condition="end with">:newads</TargetFilename> <!-- CobaltStrike BOF https://github.com/EspressoCake/Self_Deletion_BOF/blob/main/src/main.c -->
 				</Rule>
 			</FileCreateStreamHash>
 		</RuleGroup>
@@ -1763,6 +1821,7 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 				<!-- Malware -->
 				<PipeName condition="contains any">\isapi_http;\isapi_dg;\isapi_dg2;\sdlrpc;\ahexec;\winsession;\lsassw;\46a676ab7f179e511e30dd2dc41bd388;\9f81f59bc58452127884ce513865ed20;\e710f28d59aa529d6792ca6ff0ca1b34;\rpchlp_3;\NamePipe_MoreWindows;\pcheap_reuse;\gruntsvc;\583da945-62af-10e8-4902-a8f205c72b2e;\bizkaz;\svcctl;\Posh;\jaccdpqnvbrrxlaf;\csexecsvc</PipeName>
 				<PipeName condition="contains any">\atctl;\userpipe;\iehelper;\sdlrpc;\comnap</PipeName>
+				<PipeName condition="contains">\pipe\</PipeName> <!-- EfsPotato https://twitter.com/SBousseaden/status/1429530155291193354?s=20 -->
 				<!-- Cobalt Strike Pipe Names -->
 				<PipeName condition="contains all">MSSE-;-server</PipeName>
 				<PipeName condition="begin with">\postex_</PipeName>
@@ -1772,9 +1831,53 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 					<PipeName name="technique_id=T1059.001,technique_name=PowerShell" condition="begin with">\PSHost</PipeName>
 					<Image condition="is not">powershell.exe</Image>
 				</Rule>
+					<PipeName condition="begin with">\msagent_</PipeName>
+				<!-- Malleable C2 profiles https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575 -->
+				<!-- some of these are not exact matches, but the corresponding Sigma rules use Regexp to match exactly -->
+				<PipeName condition="begin with">\mojo.5688.8052.183894939787088877</PipeName>
+				<PipeName condition="begin with">\mojo.5688.8052.35780273329370473</PipeName>
+				<PipeName condition="begin with">\DserNamePipe</PipeName>
+				<PipeName condition="begin with">\mypipe-f</PipeName>
+				<PipeName condition="begin with">\mypipe-h</PipeName>
+				<PipeName condition="begin with">\windows.update.manager</PipeName>
+				<PipeName condition="begin with">\ntsvcs_</PipeName>
+				<PipeName condition="begin with">\scerpc_</PipeName>
+				<!-- Malleable C2 profiles https://gist.github.com/MHaggis/6c600e524045a6d49c35291a21e10752 -->
+				<PipeName condition="begin with">\demoagent_</PipeName>
+				<PipeName condition="begin with">\PGMessagePipe</PipeName>
+				<PipeName condition="begin with">\MsFteWds</PipeName>
+				<PipeName condition="begin with">\f4c3</PipeName>
+				<PipeName condition="begin with">\fullduplex_</PipeName>
+				<PipeName condition="begin with">\msrpc_</PipeName>
+				<PipeName condition="begin with">\win\msrpc_</PipeName>
+				<PipeName condition="begin with">\f53f</PipeName>
+				<PipeName condition="begin with">\rpc_</PipeName>
+				<PipeName condition="begin with">\spoolss_</PipeName>
+				<PipeName condition="begin with">\win_svc</PipeName>
+				<PipeName condition="begin with">\SearchTextHarvester</PipeName>
+				<PipeName condition="begin with">\adschemerpc</PipeName> <!-- Turla HyperStack - https://www.accenture.com/us-en/blogs/cyber-defense/turla-belugasturgeon-compromises-government-entity -->
+				<PipeName condition="begin with">\AnonymousPipe</PipeName> <!-- Hidden Cobra Hoplight - https://us-cert.cisa.gov/ncas/analysis-reports/ar19-304a -->
+				<PipeName condition="begin with">\bc367</PipeName> <!-- Pacifier - https://download.bitdefender.com/resources/files/News/CaseStudies/study/115/Bitdefender-Whitepaper-PAC-A4-en-EN1.pdf -->
+				<PipeName condition="begin with">\bc31a7</PipeName> <!-- Pacifier - https://download.bitdefender.com/resources/files/News/CaseStudies/study/115/Bitdefender-Whitepaper-PAC-A4-en-EN1.pdf -->
+				<PipeName condition="begin with">\testPipe</PipeName> <!-- Emissary Panda Hyerbri - https://unit42.paloaltonetworks.com/emissary-panda-attacks-middle-east-government-sharepoint-servers/ -->
+				<Rule groupRelation="and"> <!-- would be noisy otherwise as \Winsock2\CatalogchangeListener-???-0 is a legitimate pipe name -->
+					<PipeName condition="begin with">\Winsock2\CatalogChangeListener-</PipeName>
+					<PipeName condition="end with">-0,</PipeName>
+				</Rule>
 				<Rule groupRelation="and">
 					<PipeName name="technique_id=T1059.001,technique_name=PowerShell" condition="begin with">\PSHost</PipeName>
 					<Image condition="is not">powershell_ise.exe</Image>
+				</Rule>
+				<!-- these are standard pipes that appear frequently but the Sigma rules use RE to match on malicious pipes that use the common names as a prefix -->
+				<PipeName condition="begin with">\scerpc</PipeName>
+				<PipeName condition="begin with">\ntsvcs</PipeName>
+				<PipeName condition="begin with">\wkssvc</PipeName>
+				<!-- Other specific named pipes -->
+				<PipeName condition="contains">6e7645c4-32c5-4fe3-aabf-e94c2f4370e7</PipeName> <!-- LiquidSnake hacktool https://github.com/RiccardoAncarani/LiquidSnake -->
+				<Image condition="end with">\scrcons.exe</Image> <!-- Susupicious WMI Event Consumer creating a named pipe -->
+				<Rule groupRelation="and"> <!-- Some interesting ConnectPipe events that we want to include -->
+					<EventType condition="is">ConnectPipe</EventType>
+					<PipeName condition="is">\MICROSOFT##WID\tsql\query</PipeName> <!-- https://github.com/SigmaHQ/sigma/pull/2128 -->
 				</Rule>
 			</PipeEvent>
 		</RuleGroup>
