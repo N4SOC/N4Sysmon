@@ -302,6 +302,8 @@
 				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\htdocs\</Image>
 				<Image name="technique_id=T1036,technique_name=Masquerading" condition="contains">\wwwroot\</Image>
 				<!--Suspicious Windows tools-->
+				<Image condition="image">winlogon.exe</Image>
+				<Image condition="image">LogonUI.exe</Image>
 				<Image condition="image">at.exe</Image> <!--Windows: Remote task scheduling, removed in Win10 | Credit @ion-storm -->
 				<Image condition="image">certutil.exe</Image> <!--Windows: Certificate tool can contact outbound | Credit @ion-storm @FVT [ https://twitter.com/FVT/status/834433734602530817 ] -->
 				<Image condition="image">cmd.exe</Image> <!--Windows: Remote command prompt-->
