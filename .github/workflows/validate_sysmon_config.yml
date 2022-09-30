@@ -16,4 +16,4 @@ jobs:
         working-directory: "${{ github.workspace }}"
         shell: pwsh
         run: |
-          .\sysmon_test.ps1
+          .\.github\workflows\sysmon_test.ps1
