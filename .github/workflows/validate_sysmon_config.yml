@@ -2,7 +2,8 @@ name: TestSysmon
 
 on:
   push:
-    branches: [ "main" ]
+    paths:
+      - '**.xml'
   workflow_dispatch:
 
 jobs:
