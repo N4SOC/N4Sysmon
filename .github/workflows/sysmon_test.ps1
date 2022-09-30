@@ -1,13 +1,15 @@
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
+$currentDir=(Get-Location).Path
+
 function install-Sysmon() {
     Write-host "Downloading and Extracting Sysmon..."
-    (New-Object Net.WebClient).DownloadFile("https://download.sysinternals.com/files/Sysmon.zip", "$PSScriptRoot\sysmon.zip") # Download latest sysmon
-    Expand-Archive "$PSScriptRoot\sysmon.zip" -DestinationPath "$PSScriptRoot"
+    (New-Object Net.WebClient).DownloadFile("https://download.sysinternals.com/files/Sysmon.zip", "$currentdir\sysmon.zip") # Download latest sysmon
+    Expand-Archive "$currentdir\sysmon.zip" -DestinationPath "$currentdir"
     Write-host "Applying Sysmon Configuration..."
-    #Start-Process "$env:TEMP\n4agent\sysmon64.exe" -ArgumentList "-accepteula -i $PSScriptRoot\n4sysmon-endpoints.xml"  -NoNewWindow -Wait # Install sysmon with config
-    $sysmoncmd = "$PSScriptRoot\sysmon64.exe"
-    $sysmonarg = ("-accepteula -i $PSScriptRoot\n4sysmon-endpoints.xml").split(" ")
+    #Start-Process "$env:TEMP\n4agent\sysmon64.exe" -ArgumentList "-accepteula -i $currentdir\n4sysmon-endpoints.xml"  -NoNewWindow -Wait # Install sysmon with config
+    $sysmoncmd = "$currentdir\sysmon64.exe"
+    $sysmonarg = ("-accepteula -i $currentdir\n4sysmon-endpoints.xml").split(" ")
     $sysmonoutput = &$sysmoncmd $sysmonarg
     if ($sysmonoutput -like '*Configuration file validated*') {
         Write-Host "Validation Suceeded - Sysmon config is ready for deployment"
