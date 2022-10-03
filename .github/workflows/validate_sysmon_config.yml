@@ -1,0 +1,19 @@
+name: TestSysmon
+
+on:
+  push:
+    paths:
+      - '**.xml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run test script
+        working-directory: "${{ github.workspace }}"
+        shell: pwsh
+        run: |
+          .\.github\workflows\sysmon_test.ps1
