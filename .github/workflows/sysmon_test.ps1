@@ -6,14 +6,13 @@ function install-Sysmon() {
     param (
         [Parameter()] $sysmonfile
     )
-    if ($sysmonfile -like '*.xml'){
         Write-host "Downloading and Extracting Sysmon..."
         (New-Object Net.WebClient).DownloadFile("https://download.sysinternals.com/files/Sysmon.zip", "$currentdir\sysmon.zip") # Download latest sysmon
         Expand-Archive "$currentdir\sysmon.zip" -DestinationPath "$currentdir"
         Write-host "Applying Sysmon Configuration..."
         #Start-Process "$env:TEMP\n4agent\sysmon64.exe" -ArgumentList "-accepteula -i $currentdir\n4sysmon-endpoints.xml"  -NoNewWindow -Wait # Install sysmon with config
         $sysmoncmd = "$currentdir\sysmon64.exe"
-        $sysmonarg = ("-accepteula -i $currentdir\n4sysmon-endpoints.xml").split(" ")
+        $sysmonarg = ("-accepteula -i $currentdir\$sysmonFile").split(" ")
         $sysmonoutput = &$sysmoncmd $sysmonarg
         if ($sysmonoutput -like '*Configuration file validated*') {
             Write-Host "Validation Suceeded - Sysmon config is ready for deployment"
@@ -21,9 +20,6 @@ function install-Sysmon() {
         else {
             Write-Host "Validation Failed - Roll back last commit"  -BackgroundColor DarkRed -ForegroundColor Yellow
         }
-    } else {
-        Write-Host "Validation Not run - non-xml file modified"  -BackgroundColor DarkGreen -ForegroundColor Yellow
-    }
 }
 
 function test-logging() {
