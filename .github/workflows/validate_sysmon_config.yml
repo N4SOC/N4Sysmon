@@ -7,13 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-endpoint:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - id: Checkout
+        uses: actions/checkout@v3
+      - id: files
+        uses: jitterbit/get-changed-files@v1
       - name: Run test script
         working-directory: "${{ github.workspace }}"
         shell: pwsh
         run: |
-          .\.github\workflows\sysmon_test.ps1
+          .\.github\workflows\sysmon_test.ps1 -sysmonFile ${{ steps.files.outputs.all }}
+
