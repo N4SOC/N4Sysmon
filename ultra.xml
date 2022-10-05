@@ -17,11 +17,8 @@
 		<RuleGroup name="" groupRelation="or">
 			<DriverLoad onmatch="exclude">
 				<Signature condition="contains">microsoft</Signature>
-				<!--Exclude signed Microsoft drivers-->
 				<Signature condition="contains">windows</Signature>
-				<!--Exclude signed Microsoft drivers-->
 				<Signature condition="begin with">Intel </Signature>
-				<!--Exclude signed Intel drivers-->
 			</DriverLoad>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
