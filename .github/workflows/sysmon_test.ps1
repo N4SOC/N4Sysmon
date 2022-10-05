@@ -9,13 +9,16 @@ function install-Sysmon() {
         Write-host "Downloading and Extracting Sysmon..."
         (New-Object Net.WebClient).DownloadFile("https://download.sysinternals.com/files/Sysmon.zip", "$currentdir\sysmon.zip") # Download latest sysmon
         Expand-Archive "$currentdir\sysmon.zip" -DestinationPath "$currentdir"
-        Write-host "Applying Sysmon Configuration..."
-        #Start-Process "$env:TEMP\n4agent\sysmon64.exe" -ArgumentList "-accepteula -i $currentdir\n4sysmon-endpoints.xml"  -NoNewWindow -Wait # Install sysmon with config
+        Write-host "Applying Sysmon Configuration: $sysmonFile"
         $sysmoncmd = "$currentdir\sysmon64.exe"
         $sysmonarg = ("-accepteula -i $currentdir\$sysmonFile").split(" ")
         $sysmonoutput = &$sysmoncmd $sysmonarg
         if ($sysmonoutput -like '*Configuration file validated*') {
             Write-Host "Validation Suceeded - Sysmon config is ready for deployment"
+            write-host "Waiting 30 seconds for sysmon events to be generated..."
+            Start-Sleep 30
+            test-logging
+
         }
         else {
             Write-Host "Validation Failed - Roll back last commit"  -BackgroundColor DarkRed -ForegroundColor Yellow
@@ -34,7 +37,4 @@ function test-logging() {
 }
 
 install-Sysmon -sysmonfile $args[0]
-write-host "Waiting 30 seconds for sysmon events to be generated..."
-Start-Sleep 30
-test-logging
 
