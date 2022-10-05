@@ -25,13 +25,16 @@
 			<ImageLoad onmatch="exclude"></ImageLoad>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
-			<CreateRemoteThread onmatch="exclude"></CreateRemoteThread>
+			<CreateRemoteThread onmatch="exclude">
+			</CreateRemoteThread>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
-			<RawAccessRead onmatch="include"></RawAccessRead>
+			<RawAccessRead onmatch="include">
+			</RawAccessRead>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
-			<ProcessAccess onmatch="exclude"></ProcessAccess>
+			<ProcessAccess onmatch="exclude">
+			</ProcessAccess>
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
 			<FileCreate onmatch="exclude"></FileCreate>
