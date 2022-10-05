@@ -1,6 +1,5 @@
 <Sysmon schemaversion="4.50">
 	<HashAlgorithms>md5,sha256,IMPHASH</HashAlgorithms>
-	<!-- Both MD5 and SHA256 are the industry-standard algorithms for identifying files -->
 	<CheckRevocation/>
 	<EventFiltering>
 		<RuleGroup name="" groupRelation="or">
@@ -61,10 +60,5 @@
 		<RuleGroup name="" groupRelation="or">
 			<ClipboardChange onmatch="include"></ClipboardChange>
 		</RuleGroup>
-		<!--SYSMON EVENT ID 255 : ERROR-->
-		<!--"This event is generated when an error occurred within Sysmon. They can happen if the system is under heavy load
-			and certain tasked could not be performed or a bug exists in the Sysmon service. You can report any bugs on the
-			Sysinternals forum or over Twitter (@markrussinovich)."-->
-		<!--Cannot be filtered.-->
 	</EventFiltering>
 </Sysmon>
