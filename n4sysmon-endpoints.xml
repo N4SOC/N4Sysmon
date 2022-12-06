@@ -416,8 +416,8 @@
 					<DestinationPort condition="is">53</DestinationPort>					<!-- DNS Connections is noisy and pointless - M Rothe-->
 					<Protocol condition="is">udp</Protocol>
 				</Rule>
-				<Rule groupRelation="and">										<!-- UDP RDP Connections are very noisy - M Rothe-->
-					<DestinationPort condition="is">3389</DestinationPort>					
+				<Rule groupRelation="and">					<!-- UDP RDP Connections are very noisy - M Rothe-->
+					<DestinationPort condition="is">3389</DestinationPort>
 					<Protocol condition="is">udp</Protocol>
 					<Image condition="is">C:\Windows\System32\mstsc.exe</Image>
 				</Rule>
@@ -437,11 +437,11 @@
 			<ProcessTerminate onmatch="include">
 				<Image condition="begin with">C:\Users</Image>				<!--Process terminations by user binaries-->
 				<Image condition="begin with">\</Image>				<!--Devices and VSC shouldn't be executing changes | Credit: @SBousseaden @ionstorm @neu5ron @PerchedSystems [ https://twitter.com/SwiftOnSecurity/status/1133167323991486464 ] -->
-				<Image condition="contains">ekrn.exe</Image>	<!-- ESET Binary-->
-				<Image condition="contains">dsa.exe</Image> <!-- Trend Deep Security Binary-->
-				<Image condition="contains">coreFrameworkHost.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
-				<Image condition="contains">coreServiceShell.exe</Image> <!-- Trend Deep Security Anti-Malware  Binary-->
-				<Image condition="contains">MsMpEng.exe</Image> <!-- MS Defender-->
+				<Image condition="contains">ekrn.exe</Image>				<!-- ESET Binary-->
+				<Image condition="contains">dsa.exe</Image>				<!-- Trend Deep Security Binary-->
+				<Image condition="contains">coreFrameworkHost.exe</Image>				<!-- Trend Deep Security Anti-Malware  Binary-->
+				<Image condition="contains">coreServiceShell.exe</Image>				<!-- Trend Deep Security Anti-Malware  Binary-->
+				<Image condition="contains">MsMpEng.exe</Image>				<!-- MS Defender-->
 			</ProcessTerminate>
 		</RuleGroup>
 
@@ -664,35 +664,35 @@
 
 				<TargetFilename condition="contains">readme</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
 				<TargetFilename condition="contains">decrypt</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="contains">your_files</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="contains">your_files</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
 				<TargetFilename condition="contains">encrypted</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="contains">recover_files</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				
-				<TargetFilename condition="end with">.micro</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="end with">.zepto</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="end with">.cerber</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="end with">.locky</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="end with">.onion</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="end with">.cryptolocker</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
-				<TargetFilename condition="end with">.cry</TargetFilename>			<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="contains">recover_files</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
 
-				<TargetFilename condition="contains">\SAM-20</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
-				<TargetFilename condition="contains">\SAM-haxx</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
-				<TargetFilename condition="contains">\Sam.save</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
-				<TargetFilename condition="contains">\hive_sam_</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
-				<TargetFilename condition="is">C:\windows\temp\sam</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
-				<TargetFilename condition="begin with">C:\Windows\System32\spool\drivers\x64</TargetFilename> <!-- PrinterNight -->
+				<TargetFilename condition="end with">.micro</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.zepto</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.cerber</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.locky</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.onion</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.cryptolocker</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
+				<TargetFilename condition="end with">.cry</TargetFilename>				<!--Possible ransomware activity - M Rothe -->
 
-				<TargetFilename condition="end with">.001</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.002</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.003</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.004</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.005</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.006</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.007</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.008</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.009</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
-				<TargetFilename condition="end with">.010</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="contains">\SAM-20</TargetFilename>				<!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="contains">\SAM-haxx</TargetFilename>				<!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="contains">\Sam.save</TargetFilename>				<!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="contains">\hive_sam_</TargetFilename>				<!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="is">C:\windows\temp\sam</TargetFilename>				<!-- Default output of HiveNightmare / SeriousSAM tools -->
+				<TargetFilename condition="begin with">C:\Windows\System32\spool\drivers\x64</TargetFilename>				<!-- PrinterNight -->
+
+				<TargetFilename condition="end with">.001</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.002</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.003</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.004</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.005</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.006</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.007</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.008</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.009</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.010</TargetFilename>				<!-- Multi-part archive being written, can be used for exfil -->
 			</FileCreate>
 		</RuleGroup>
 
@@ -1031,7 +1031,7 @@
 				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msf-pipe</PipeName>				<!-- default metasploit pipe name-->
 				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\msagent_</PipeName>				<!-- default cobalt strike pipe name-->
 				<PipeName name="technique_id=T1021.002,technique_name=SMB/Windows Admin Shares" condition="begin with">\PSEXESVC</PipeName>
-				<!-- Too noisy M Rothe <PipeName name="technique_id=T1049,technique_name=System Network Connections Discovery" condition="begin with">\srvsvc</PipeName>-->				<!--session enumeration--> 
+				<!-- Too noisy M Rothe <PipeName name="technique_id=T1049,technique_name=System Network Connections Discovery" condition="begin with">\srvsvc</PipeName>-->				<!--session enumeration-->
 				<PipeName name="technique_id=T1033,technique_name=System Owner/User Discovery" condition="begin with">\winreg</PipeName>				<!--also used in lateral movement-->
 				<!--Taken From https://github.com/Neo23x0/sysmon-config/blob/master/sysmonconfig-export.xml-->
 				<!-- Remote Command Execution Tools -->
@@ -1041,7 +1041,7 @@
 				<!-- Malware -->
 				<PipeName condition="contains any">\isapi_http;\isapi_dg;\isapi_dg2;\sdlrpc;\ahexec;\winsession;\lsassw;\46a676ab7f179e511e30dd2dc41bd388;\9f81f59bc58452127884ce513865ed20;\e710f28d59aa529d6792ca6ff0ca1b34;\rpchlp_3;\NamePipe_MoreWindows;\pcheap_reuse;\gruntsvc;\583da945-62af-10e8-4902-a8f205c72b2e;\bizkaz;\svcctl;\Posh;\jaccdpqnvbrrxlaf;\csexecsvc</PipeName>
 				<PipeName condition="contains any">\atctl;\userpipe;\iehelper;\sdlrpc;\comnap</PipeName>
-				<PipeName condition="contains">\pipe\</PipeName> <!-- EfsPotato https://twitter.com/SBousseaden/status/1429530155291193354?s=20 -->
+				<PipeName condition="contains">\pipe\</PipeName>				<!-- EfsPotato https://twitter.com/SBousseaden/status/1429530155291193354?s=20 -->
 				<!-- Cobalt Strike Pipe Names -->
 				<PipeName condition="contains all">MSSE-;-server</PipeName>
 				<PipeName condition="begin with">\postex_</PipeName>
@@ -1370,6 +1370,12 @@
 				<Image condition="end with">rdpclip.exe</Image>
 			</ClipboardChange>
 		</RuleGroup>
+
+		<RuleGroup name="" groupRelation="or">
+			<FileBlockShredding onmatch="exclude">
+			</FileBlockShredding >
+		</RuleGroup>
+
 		<!--SYSMON EVENT ID 255 : ERROR-->
 		<!--"This event is generated when an error occurred within Sysmon. They can happen if the system is under heavy load
 			and certain tasked could not be performed or a bug exists in the Sysmon service. You can report any bugs on the
