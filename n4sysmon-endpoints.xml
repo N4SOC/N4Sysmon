@@ -683,7 +683,16 @@
 				<TargetFilename condition="is">C:\windows\temp\sam</TargetFilename> <!-- Default output of HiveNightmare / SeriousSAM tools -->
 				<TargetFilename condition="begin with">C:\Windows\System32\spool\drivers\x64</TargetFilename> <!-- PrinterNight -->
 
-
+				<TargetFilename condition="end with">.001</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.002</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.003</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.004</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.005</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.006</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.007</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.008</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.009</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
+				<TargetFilename condition="end with">.010</TargetFilename> <!-- Multi-part archive being written, can be used for exfil -->
 			</FileCreate>
 		</RuleGroup>
 
