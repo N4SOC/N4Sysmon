@@ -1484,8 +1484,8 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 		<!--NOTE:	Because Sysmon runs as a service, it has no filtering ability for, or concept of, HKCU or HKEY_CURRENT_USER. Use "contains" or "end with" to get around this limitation-->
 
 		<!-- ! CRITICAL NOTE !:	It may appear this section is MISSING important entries, but SOME RULES MONITOR MANY KEYS, so look VERY CAREFULLY to see if something is already covered.
-								Sysmon's wildcard monitoring along with highly-tuned generic strings cuts the rulesets down immensely, compared to doing this in other tools.
-								For example, most COM hijacking in CLSID's across the registry is covered by a single rule monitoring a InProcServer32 wildcard-->
+    Sysmon's wildcard monitoring along with highly-tuned generic strings cuts the rulesets down immensely, compared to doing this in other tools.
+    For example, most COM hijacking in CLSID's across the registry is covered by a single rule monitoring a InProcServer32 wildcard-->
 
 		<!--DATA: EventType, UtcTime, ProcessGuid, ProcessId, Image, TargetObject, Details (can't filter on), NewName (can't filter on)-->
 		<RuleGroup name="" groupRelation="or">
@@ -2030,10 +2030,10 @@ Process Injection with Cobalt Strike leads to remote thread creation with a pred
 		<!--EVENT 22: "Dns query"-->
 		<!--NOTE:	Due to the volume of events that DNS queries generate, some orgs may want to remove this section from their configuration to reduce Sysmon log turnover. -->
 		<!--COMMENT:	DNS logging is a very nuanced challenge in monitoring due to event volume. Legitimate domains can be used to host malware/C2, but lookup itself is not very informative.
-						It's fine to exclude monitoring these bulk low-value lookups, but at same time, you would not have a full log of how malware communicated, potentially missing C2.
-						This section of Sysmon configuration will require your full judgement and knowledge of your org's priorities. There is no correct answer.-->
+  		It's fine to exclude monitoring these bulk low-value lookups, but at same time, you would not have a full log of how malware communicated, potentially missing C2.
+  		This section of Sysmon configuration will require your full judgement and knowledge of your org's priorities. There is no correct answer.-->
 		<!--OPERATIONS:	Chrome and Firefox prefetch DNS lookups, or use alternate DNS lookup methods Sysmon won't capture. You need to turn these off.
-						Search for Group Policy for these browsers to configure this.-->
+  		Search for Group Policy for these browsers to configure this.-->
 		<!--CONFIG:	DNS poisoning is an issue during threat investigations. Try to only exclude ROUTINE system-level queries you know are strongly validated with HTTPS or code signing.-->
 		<!--CONFIG:	If you exclude microsoft.com, someone could register malware-microsoft.com and it wouldn't be logged. Use "END WITH" with leading . or "IS" operators.-->
 		<!--CONFIG:	Be very specific in exclusions. Threat actors use legitimate services, too. Dont exclude all of AWS or Azure or Google or CDNs!-->
