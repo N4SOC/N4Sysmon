@@ -709,7 +709,7 @@
 		</RuleGroup>
 		<RuleGroup name="" groupRelation="or">
 			<CreateRemoteThread onmatch="include">
-				<StartAddress condition="endwith">0B80</StartAddress>
+				<StartAddress condition="end with">0B80</StartAddress>
 				<!-- 
 Process Injection with Cobalt Strike leads to remote thread creation with a predictable memory address. This can be bypassed by modifying the shellcode in a malleable C2 profile. https://medium.com/@olafhartong/cobalt-strike-remote-threads-detection-206372d11d0f -->
 			</CreateRemoteThread>
