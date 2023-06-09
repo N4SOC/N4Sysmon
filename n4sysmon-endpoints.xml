@@ -384,7 +384,7 @@
 				<DestinationPort name="RDP" condition="is">3389</DestinationPort>				<!--Windows:RDP: Monitor admin connections-->
 				<DestinationPort name="VNC" condition="is">5800</DestinationPort>				<!--VNC protocol: Monitor admin connections, often insecure, using hard-coded admin password-->
 				<DestinationPort name="VNC" condition="is">5900</DestinationPort>				<!--VNC protocol Monitor admin connections, often insecure, using hard-coded admin password-->
-				<DestinationPort name="Alert,Metasploit" condition="is">444</DestinationPort>\
+				<DestinationPort name="Alert,Metasploit" condition="is">444</DestinationPort>
 				<DestinationPort name="WinRM" condition="is">5985</DestinationPort>				<!-- WinRM protocol used for remote connections to execute commands -->
 				<DestinationPort name="WinRM over HTTPS" condition="is">5986</DestinationPort>				<!-- WinRM over HTTPS when set up in an environment can be used for remote connections to execute commands -->
 				<!--Ports: Proxy-->
