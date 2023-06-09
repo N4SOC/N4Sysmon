@@ -221,7 +221,7 @@
 
 				<Rule groupRelation="and">
 					<ParentImage condition="end with">Program Files\Trend Micro\Deep Security Agent\dsa.exe</ParentImage>
-					<Image condition="contain">Program Files\VMWare\VMWare Tools\vmtoolsd.exe</Image>
+					<Image condition="contains">Program Files\VMWare\VMWare Tools\vmtoolsd.exe</Image>
 				</Rule>
 
 				<Rule groupRelation="and">
