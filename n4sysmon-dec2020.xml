@@ -377,6 +377,7 @@
 				<Image condition="image">psinfo.exe</Image>
 				<Image name="technique_id=T1218,technique_name=Signed Binary Proxy Execution" condition="image">Mavinject.exe</Image>
 				<!--Ports: Suspicious-->
+				<DestinationPort name="FTP" condition="is">21</DestinationPort>				<!--FTP - File Transfer-->
 				<DestinationPort name="SSH" condition="is">22</DestinationPort>				<!--SSH protocol, monitor admin connections-->
 				<DestinationPort name="Telnet" condition="is">23</DestinationPort>				<!--Telnet protocol, monitor admin connections, insecure-->
 				<DestinationPort name="SMTP" condition="is">25</DestinationPort>				<!--SMTP mail protocol port, insecure, used by threats-->
