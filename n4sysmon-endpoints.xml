@@ -570,6 +570,7 @@
 				<!--VNC protocol: Monitor admin connections, often insecure, using hard-coded admin password-->
 				<DestinationPort name="VNC" condition="is">5900</DestinationPort>
 				<!--VNC protocol Monitor admin connections, often insecure, using hard-coded admin password-->
+				<DestinationPort name="Alert" condition="is">445</DestinationPort>
 				<DestinationPort name="Alert,Metasploit" condition="is">444</DestinationPort>
 				<DestinationPort name="WinRM" condition="is">5985</DestinationPort>
 				<!-- WinRM protocol used for remote connections to execute commands -->
